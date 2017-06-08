@@ -1,5 +1,163 @@
 == Custom Derive
 
  * Procedural macro
+ * Allow to write your own `#[derive(Thing)]`
+ * Generate code at compile time
+
+=== Example: Generate getters and setters for a struct
+
+[source,rust]
+----
+#[derive(GetterSetter)]
+struct Point {
+    x: i32,
+    y: i32,
+}
+----
+
+will generate:
+
+[source,rust]
+----
+impl Point {
+    fn get_x(&self) -> &i32 { &self.x }
+
+    fn get_y(&self) -> &i32 { &self.y }
+
+    fn set_x(&mut self, value: i32) { self.x = value; }
+
+    fn set_y(&mut self, value: i32) { self.y = value; }
+}
+----
+
+=== Attempt with `macro_rules!`:
+
+[source,rust]
+----
+getter_setter!(struct P {
+    x: i32,
+    y: i32,
+});
+----
+
+[source,rust]
+----
+macro_rules! getter_setter {
+    (struct $struct_name:ident {
+        $( $field_name:ident : $field_type:ident, )* }) => {
+        struct $struct_name {
+            $($field_name: $field_type,)*
+        }
+
+        impl $struct_name {
+            $(fn concat_idents!(get_, $field_name)(&self)
+                -> &$field_type
+            {
+                &self.$field_name
+            })*
+        }
+    };
+}
+----
+
+=== Tip #1: Never use `unwrap()` in procedural macro
+
+----
+error: proc-macro derive panicked
+ --> src/main.rs:4:10
+  |
+4 | #[derive(GetterSetter)]
+  |          ^^^^^^^^^^^^
+  |
+  = help: message: called `Option::unwrap()` on a `None` value
+----
+
+=== Tip #2: Use `{:#?}` to inspect the AST
+
+[source,rust]
+----
+println!("{:#?}", ast);
+----
+
+---
+DeriveInput {
+    ident: Ident(
+        "Point"
+    ),
+    vis: Inherited,
+    attrs: [],
+    generics: Generics {
+        lifetimes: [],
+        ty_params: [],
+        where_clause: WhereClause {
+            predicates: []
+        }
+    },
+    body: Struct(
+        Struct(
+            [
+                Field {
+                    ident: Some(
+                        Ident(
+                            "x"
+                        )
+                    ),
+                    vis: Inherited,
+                    attrs: [],
+                    ty: Path(
+                        None,
+                        Path {
+                            global: false,
+                            segments: [
+                                PathSegment {
+                                    ident: Ident(
+                                        "i32"
+                                    ),
+                                    parameters: AngleBracketed(
+                                        AngleBracketedParameterData {
+                                            lifetimes: [],
+                                            types: [],
+                                            bindings: []
+                                        }
+                                    )
+                                }
+                            ]
+                        }
+                    )
+                },
+                Field {
+                    ident: Some(
+                        Ident(
+                            "y"
+                        )
+                    ),
+                    vis: Inherited,
+                    attrs: [],
+                    ty: Path(
+                        None,
+                        Path {
+                            global: false,
+                            segments: [
+                                PathSegment {
+                                    ident: Ident(
+                                        "i32"
+                                    ),
+                                    parameters: AngleBracketed(
+                                        AngleBracketedParameterData {
+                                            lifetimes: [],
+                                            types: [],
+                                            bindings: []
+                                        }
+                                    )
+                                }
+                            ]
+                        }
+                    )
+                }
+            ]
+        )
+    )
+}
+---
 
 === Real-world Example

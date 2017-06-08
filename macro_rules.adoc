@@ -72,6 +72,20 @@ macro_rules! op {
 }
 ----
 
+=== Example: Shortcut for HashMap
+
+[source,rust]
+----
+macro_rules! hash {
+    ($( $key:expr => $value:expr, )*) => {{ // <1>
+        let mut hashmap = $crate::std::collections::HashMap::new();
+        $(hashmap.insert($key, $value);)*
+        hashmap
+    }};
+}
+----
+<1> Note the additional curly braces.
+
 === Limitations of macros
 
  * Scope
