@@ -1,0 +1,9 @@
+== Quiz
+
+. How would you simulate function-like procedural macro on stable Rust?
+
+i.e. something like:
+[source,rust]
+----
+println!("{} < {}", 42, num);
+----

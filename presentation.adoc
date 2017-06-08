@@ -1,0 +1,9 @@
+= Introduction to Rust
+:source-highlighter: pygments
+:pygments-style: monokai
+
+include::traits.adoc[]
+include::generics.adoc[]
+include::macro_rules.adoc[]
+include::custom_derive.adoc[]
+include::quiz.adoc[]

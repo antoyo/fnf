@@ -1,0 +1,106 @@
+== Traits
+
+ * Ad-hoc polymorphism (function/operator overloading)
+ * A set of methods and types that can be defined for a type
+ * Useful for generic functions
+ * Similar to interfaces in OO languages
+
+=== Example of traits
+
+ * Display
+ * Debug
+ * Eq
+ * Ord
+ * Add
+ * Sub
+ * Mul
+
+=== The Debug trait
+
+[source,rust]
+----
+#[derive(Debug)]
+enum List {
+    Empty,
+    Cons(Point, Box<List>),
+}
+
+use List::{Cons, Empty};
+----
+
+[source,rust]
+----
+let p1 = Point::new(1, 2);
+let p2 = Point::new(2, 3);
+let p3 = Point::new(3, 4);
+let p4 = Point::new(4, 5);
+println!("{:?}", Cons(p1, Box::new(Cons(p2, Box::new(Cons(p3,
+    Box::new(Cons(p4, Box::new(Empty)))))))));
+----
+
+----
+Cons(Point { x: 1, y: 2 }, Cons(Point { x: 2, y: 3 }, Cons(Point { x: 3, y: 4 }, Cons(Point { x: 4, y: 5 }, Empty))))
+----
+
+=== The Debug Trait (continued)
+
+[source,rust]
+----
+println!("{:#?}", Cons(p1, Box::new(Cons(p2, Box::new(Cons(p3, // <1>
+    Box::new(Cons(p4, Box::new(Empty)))))))));
+----
+<1> Usage of `{:#?}` instead of `{:?}`
+
+----
+Cons(
+    Point {
+        x: 1,
+        y: 2
+    },
+    Cons(
+        Point {
+            x: 2,
+            y: 3
+        },
+        Cons(
+            Point {
+                x: 3,
+                y: 4
+            },
+            Cons(
+                Point {
+                    x: 4,
+                    y: 5
+                },
+                Empty
+            )
+        )
+    )
+)
+----
+
+=== Rules of trait implementations
+
+ * Either the type or the trait must be defined in the same crate as the implementation
+
+=== Real-world Example
+
+[source,rust]
+----
+trait Widget
+    where Self: Clone,
+          Self::Msg: Clone + DisplayVariant,
+{
+    type Model;
+    type Msg;
+
+    fn model() -> Self::Model;
+
+    fn subscriptions(_relm: &Relm<Self::Msg>) {
+    }
+
+    fn update(&mut self, event: Self::Msg, model: &mut Self::Model);
+
+    fn view(relm: &RemoteRelm<Self>, model: &Self::Model) -> Self;
+}
+----

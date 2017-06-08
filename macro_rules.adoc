@@ -1,0 +1,194 @@
+== Macro Rules
+
+ * Macro by example
+ * Declarative macro
+
+=== Example (usage)
+
+[source,rust]
+----
+op!(+, self:Point, p2:Point, {
+    Point {
+        x: self.x + p2.x,
+        y: self.y + p2.y,
+    }
+});
+----
+
+will get converted to:
+
+[source,rust]
+----
+impl Add for Point {
+    type Output = Point;
+
+    fn add(self, other: Point) -> Self {
+        Point {
+            x: self.x + other.x,
+            y: self.y + other.y,
+        }
+    }
+}
+----
+
+=== Example: shortcut for operator overloading
+
+[source,rust]
+----
+macro_rules! op {
+    (+, $_self:ident : $typ1:ty, $other:ident : $typ2:ty,
+        $block:block) =>
+    {
+        impl $crate::std::ops::Add for $typ1 {
+            type Output = $typ1;
+
+            fn add($_self, $other: $typ2) -> Self {
+                $block
+            }
+        }
+    };
+    // […]
+}
+----
+
+// TODO: check if using $crate correctly and explain why it is needed.
+
+=== Example (continued)
+
+[source,rust]
+----
+    // […]
+    (-, $_self:ident : $typ1:ty, $other:ident : $typ2:ty,
+        $block:block) =>
+    {
+        impl $crate::std::ops::Sub for $typ1 {
+            type Output = $typ1;
+
+            fn sub($_self, $other: $typ2) -> Self {
+                $block
+            }
+        }
+    };
+}
+----
+
+=== Limitations of macros
+
+ * Scope
+ * Syntax
+
+[source,rust]
+----
+op!(self:Point + p2:Point, {
+    Point {
+        x: self.x + p2.x,
+        y: self.y + p2.y,
+    }
+});
+----
+
+----
+error: `$typ1:ty` is followed by `+`, which is not allowed for
+`ty` fragments
+  --> src/main.rs:51:30
+   |
+51 |     ($_self:ident : $typ1:ty + $other:ident : $typ2:ty,
+$block:block) => {
+   |                              ^
+----
+
+=== Macros are hygienic
+
+[source,rust]
+----
+macro_rules! op {
+    (+, $_self:ident : $typ:ty, $block:block) => {
+        impl $crate::std::ops::Add for $typ {
+            type Output = $typ;
+
+            fn add($_self, other: $typ) -> Self { // <1>
+                $block
+            }
+        }
+    };
+}
+----
+<1> Usage of hard-coded `other` identifier.
+
+=== Macros are hygienic (continued)
+
+[source,rust]
+----
+op!(+, self:Point, {
+    Point {
+        x: self.x + other.x,
+        y: self.y + other.y,
+    }
+});
+----
+
+----
+error[E0425]: cannot find value `other` in this scope
+  --> src/main.rs:73:21
+   |
+73 |         x: self.x + other.x,
+   |                     ^^^^^ not found in this scope
+
+error[E0425]: cannot find value `other` in this scope
+  --> src/main.rs:74:21
+   |
+74 |         y: self.y + other.y,
+   |                     ^^^^^ not found in this scope
+----
+
+=== Real-world Example
+
+[source,rust]
+----
+#[macro_export]
+macro_rules! connect {
+    // Connect to a GTK+ widget event, sending a message to another widget.
+    ($widget:expr, $event:ident($($args:pat),*), $other_component:expr, $msg:expr) => {
+        let stream = $other_component.stream().clone();
+        $widget.$event(move |$($args),*| {
+            let msg: Option<_> = $crate::IntoOption::into_option($msg);
+            if let Some(msg) = msg {
+                stream.emit(msg);
+            }
+        });
+    };
+
+    // […]
+----
+
+=== Real-world Example (continued)
+
+[source,rust]
+----
+    // […]
+    ($src_component:ident @ $message:pat, $dst_component:expr, $msg:expr) => {
+        let stream = $dst_component.stream().clone();
+        $src_component.stream().observe(move |msg| {
+            #[allow(unreachable_patterns)]
+            match msg {
+                &$message =>  {
+                    let msg: Option<_> = $crate::IntoOption::into_option($msg);
+                    if let Some(msg) = msg {
+                        stream.emit(msg);
+                    }
+                },
+                _ => (),
+            }
+        });
+    };
+}
+----
+
+=== Real-world Example (usage)
+
+[source,rust]
+----
+connect!(relm, plus_button, connect_clicked(_), Msg::Increment);
+
+connect!(text@Change(ref text), relm, TextChange(text.clone()));
+----
