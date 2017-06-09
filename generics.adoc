@@ -79,4 +79,4 @@ let tail = Empty;                                 // <2>
 let list = Cons(42u8, Box::new(tail));
 ----
 <1> This looks like a fish `::<>`
-<2> The compile knows `tail` has type `List<u8>` because it is used with an `u8` afterwards
+<2> The compiler knows `tail` has type `List<u8>` because it is used with an `u8` afterwards
