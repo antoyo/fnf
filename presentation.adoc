@@ -1,9 +1,21 @@
 = Introduction to Rust
 :source-highlighter: pygments
 :pygments-style: monokai
+:imagesdir: ./images
+
+include::introduction.adoc[]
+
+// TODO: check if the code compile.
+include::basics.adoc[]
 
 include::traits.adoc[]
+
 include::generics.adoc[]
+
 include::macro_rules.adoc[]
+
 include::custom_derive.adoc[]
+
 include::quiz.adoc[]
+
+include::macro2.adoc[]

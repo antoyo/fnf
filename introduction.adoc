@@ -1,0 +1,9 @@
+== Plan
+
+ * Basics of Rust
+ * Traits
+ * Generics
+ * Macro rules
+ * Custom derive
+ * Quiz
+ * Surprise

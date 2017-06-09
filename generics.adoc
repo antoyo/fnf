@@ -1,3 +1,82 @@
 == Generics
 
  * Parametric polymorphism (generic function or type)
+ * Way to avoid code duplication
+ * Static dispatch when using trait bounds
+
+=== Attempt at creating a generic function
+
+[source,rust]
+----
+fn min<T>(a: T, b: T) -> T {
+    if a < b {
+        a
+    }
+    else {
+        b
+    }
+}
+----
+
+----
+error[E0369]: binary operation `<` cannot be applied to type `T`
+   --> src/main.rs:227:8
+    |
+227 |     if a < b {
+    |        ^^^^^
+    |
+    = note: an implementation of `std::cmp::PartialOrd` might be missing for `T`
+----
+
+=== Example
+
+[source,rust]
+----
+fn min<T: PartialOrd>(a: T, b: T) -> T { // <1>
+    if a < b {
+        a
+    }
+    else {
+        b
+    }
+}
+
+println!("{}", min(24, 42));
+----
+<1> The type `T` must implement `PartialOrd`
+
+=== Generic type
+
+[source,rust]
+----
+enum List<T> {
+    Empty,
+    Cons(T, Box<List<T>>),
+}
+
+enum List<T: Eq> {
+    Empty,
+    Cons(T, Box<List<T>>),
+}
+
+enum List<T>
+    where T: Eq
+{
+    Empty,
+    Cons(T, Box<List<T>>),
+}
+----
+
+=== Setting the generic type
+
+[source,rust]
+----
+let list = Cons::<u8>(42, Box::new(Empty::<u8>)); // <1>
+
+let list: List<u8> = Cons(42, Box::new(Empty));
+
+let tail = Empty;                                 // <2>
+let list = Cons(42u8, Box::new(tail));
+----
+<1> This looks like a fish `::<>`
+<2> The compile knows `tail` has type `List<u8>` because it is used with an `u8` afterwards

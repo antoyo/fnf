@@ -1,0 +1,165 @@
+[data-background="images/rust.png", data-background-size="288px", data-state="top-right"]
+== Rust
+
+* Designed by Mozilla, released in 2010
+* Multi-paradigm (imperative, functional, concurrent)
+* Static and strongly typed (with type inference)
+* Safe
+* Low-level
+* Automatic memory management (without garbage collector)
+* Servo web engine
+
+=== Strengths of Rust
+
+* Zero-cost abstractions
+* Concurrent programming
+* Safe:
+** No null pointers
+** No use after free
+** No use before initialization
+** Immutable variables by default
+** No memory leaks
+
+=== Hello World!
+
+[source, rust]
+----
+fn main() {
+    println!("Hello World!"); // <1>
+}
+----
+<1> `println!` is a macro.
+
+=== Variable
+
+[source, rust]
+----
+let number: i32 = 42; // <1>
+let number = 42;      // <2>
+let mut number = 24; // <3>
+----
+<1> 32-bit signed integer variable
+<2> specifying the type is optional thanks to type inference
+<3> mutable variable
+
+=== Structure
+
+[source, rust]
+----
+struct Person {
+    firstname: String,
+    lastname: String,
+    age: u8,                         // <1>
+}
+
+impl Person {
+    fn full_name(&self) -> String { // <2> <3>
+        self.firstname + " " + &self.lastname
+    }
+}
+----
+<1> 8-bit unsigned integer
+<2> `self` is the current instance
+<3> `&` specify that self is passed by reference
+
+=== Use of structures
+
+[source, rust]
+----
+let lastname = "Hoare";
+let firstname = "Graydon";
+let person = Person {
+    age: 42,
+    lastname: lastname,
+    firstname,
+};
+
+let full_name = person.full_name();
+----
+
+=== Attribute
+
+[source, rust]
+----
+#[derive(Clone)]
+struct Person {
+    firstname: String,
+    lastname: String,
+    age: u8,
+}
+----
+
+=== Pattern matching
+
+[source, rust]
+----
+match number {
+    1 => println!("one"),
+    2 => println!("two"),
+    3 | 4 => println!("three or four"),
+    5 ... 10 => println!("between 5 and 10"),
+    _ => println!("other"),
+}
+----
+
+=== Pattern matching (destructuring)
+
+[source, rust]
+----
+enum List {
+    Empty,
+    Cons(i32, Box<List>),
+}
+
+fn sum_list(list: &List) -> i32 {
+    match *list {
+        List::Empty => 0,
+        List::Cons(element, ref rest) =>
+            element + sum_list(rest),
+    }
+}
+----
+
+
+=== Pattern matching (`if`)
+
+[source, rust]
+----
+fn is_empty(list: &List) -> bool {
+    if let List::Empty = *list {
+        true
+    }
+    else {
+        false
+    }
+}
+----
+
+=== Expressions
+
+[source, rust]
+----
+let text =
+    if number > 42 {      // <1>
+        "greater than 42" // <2>
+    }
+    else {
+        "lesser than or equal to 42"
+    };
+----
+<1> `if` is an expression
+<2> no semicolon
+
+=== Function
+
+[source, rust]
+----
+fn max(number1: i32, number2: i32) -> i32 {
+    if number1 > number2 {
+        number1
+    }
+    else {
+        number2
+    }
+}
+----

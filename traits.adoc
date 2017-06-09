@@ -81,7 +81,42 @@ Cons(
 
 === Rules of trait implementations
 
+ * The trait must be in scope to use its methods
  * Either the type or the trait must be defined in the same crate as the implementation
+
+=== Example
+
+[source,rust]
+----
+trait UniqueElem {
+    fn unique_count(&self) -> usize;
+}
+
+impl UniqueElem for HashSet<i32> {
+    fn unique_count(&self) -> usize {
+        self.len()
+    }
+}
+----
+
+=== More about traits
+
+[source,rust]
+----
+trait UniqueElem: IntoIterator       // <1>
+    where Self: Sized,
+          <Self as IntoIterator>::Item: Eq + Hash,
+{
+    fn unique_count(self) -> usize { // <2>
+        let elems: HashSet<_> = self.into_iter().collect();
+        elems.len()
+    }
+}
+
+impl UniqueElem for Vec<i32> { }
+----
+<1> The types implementing `UniqueElem` must also implement `IntoIterator`
+<2> Default implementation of the method
 
 === Real-world Example
 

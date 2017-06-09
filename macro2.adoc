@@ -1,0 +1,26 @@
+== Surprise!
+
+=== Declarative Macro 2.0
+
+ * Better hygiene
+ * Better scoping
+
+=== Example
+
+[source,rust]
+----
+mod collections {
+    pub macro hash($( $key:expr => $value:expr , )*) {{
+        let mut hashmap = ::std::collections::HashMap::new();
+        $(hashmap.insert($key, $value);)*
+        hashmap
+    }}
+}
+
+use collections::hash;
+
+let hashmap = hash! {
+    "one" => 1,
+    "two" => 2,
+};
+----

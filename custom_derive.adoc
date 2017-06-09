@@ -8,6 +8,9 @@
 
 [source,rust]
 ----
+#[macro_use]
+extern crate getter_setter;
+
 #[derive(GetterSetter)]
 struct Point {
     x: i32,
@@ -44,7 +47,7 @@ getter_setter!(struct P {
 ----
 macro_rules! getter_setter {
     (struct $struct_name:ident {
-        $( $field_name:ident : $field_type:ident, )* }) => {
+        $( $field_name:ident : $field_type:ty, )* }) => {
         struct $struct_name {
             $($field_name: $field_type,)*
         }
@@ -60,6 +63,64 @@ macro_rules! getter_setter {
 }
 ----
 
+=== Implementation
+
+[source,rust]
+----
+#[proc_macro_derive(GetterSetter)]
+pub fn getter_setter(input: TokenStream) -> TokenStream {
+    let string = input.to_string();
+    let ast = syn::parse_derive_input(&string)
+        .expect("cannot parse input string");
+    let gen = impl_getter_setter(&ast);
+    gen.parse()
+        .expect("cannot parse generated code")
+}
+----
+
+=== Implementation (continued)
+
+[source,rust]
+----
+fn impl_getter_setter(ast: &MacroInput) -> Tokens {
+    let name = &ast.ident;
+    let mut methods = vec![];
+    if let Struct(VariantData::Struct(ref fields)) = ast.body {
+        for field in fields {
+            let name = field.ident.as_ref()
+                .expect("field should have a name");
+            let ty = &field.ty;
+
+            let getter_name = Ident::new(format!("get_{}", name));
+            methods.push(quote! {
+                pub fn #getter_name(&self) -> &#ty {
+                    &self.#name
+                }
+            });
+            // […]
+----
+
+=== Implementation (continued)
+
+[source,rust]
+----
+            // […]
+            let setter_name = Ident::new(format!("set_{}", name));
+            methods.push(quote! {
+                pub fn #setter_name(&mut self, value: #ty) {
+                    self.#name = value;
+                }
+            });
+        }
+    }
+    quote! {
+        impl #name {
+            #(#methods)*
+        }
+    }
+}
+----
+
 === Tip #1: Never use `unwrap()` in procedural macro
 
 ----
@@ -72,14 +133,14 @@ error: proc-macro derive panicked
   = help: message: called `Option::unwrap()` on a `None` value
 ----
 
-=== Tip #2: Use `{:#?}` to inspect the AST
+=== Tip #2: Use `{:##?}` to inspect the AST
 
 [source,rust]
 ----
 println!("{:#?}", ast);
 ----
 
----
+----
 DeriveInput {
     ident: Ident(
         "Point"
@@ -158,6 +219,21 @@ DeriveInput {
         )
     )
 }
----
+----
 
 === Real-world Example
+
+[source,rust]
+----
+#[derive(Commands)]
+pub enum AppCommand {
+    #[completion(hidden)]
+    ActivateSelection,
+    #[help(text="Go back in the history")]
+    Back,
+    // […]
+    #[help(text="Open an URL")]
+    Open(String),
+    // […]
+}
+----

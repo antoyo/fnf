@@ -2,15 +2,16 @@
 
  * Macro by example
  * Declarative macro
+ * Way to avoid repetition
 
 === Example (usage)
 
 [source,rust]
 ----
-op!(+, self:Point, p2:Point, {
+op!(+, self:Point, other:Point, {
     Point {
-        x: self.x + p2.x,
-        y: self.y + p2.y,
+        x: self.x + other.x,
+        y: self.y + other.y,
     }
 });
 ----
@@ -39,7 +40,7 @@ macro_rules! op {
     (+, $_self:ident : $typ1:ty, $other:ident : $typ2:ty,
         $block:block) =>
     {
-        impl $crate::std::ops::Add for $typ1 {
+        impl ::std::ops::Add for $typ1 {
             type Output = $typ1;
 
             fn add($_self, $other: $typ2) -> Self {
@@ -51,8 +52,6 @@ macro_rules! op {
 }
 ----
 
-// TODO: check if using $crate correctly and explain why it is needed.
-
 === Example (continued)
 
 [source,rust]
@@ -61,7 +60,7 @@ macro_rules! op {
     (-, $_self:ident : $typ1:ty, $other:ident : $typ2:ty,
         $block:block) =>
     {
-        impl $crate::std::ops::Sub for $typ1 {
+        impl ::std::ops::Sub for $typ1 {
             type Output = $typ1;
 
             fn sub($_self, $other: $typ2) -> Self {
@@ -72,19 +71,14 @@ macro_rules! op {
 }
 ----
 
-=== Example: Shortcut for HashMap
+=== Demo: Shortcut for HashMap
 
 [source,rust]
 ----
 macro_rules! hash {
-    ($( $key:expr => $value:expr, )*) => {{ // <1>
-        let mut hashmap = $crate::std::collections::HashMap::new();
-        $(hashmap.insert($key, $value);)*
-        hashmap
-    }};
+    // TODO
 }
 ----
-<1> Note the additional curly braces.
 
 === Limitations of macros
 
@@ -93,10 +87,10 @@ macro_rules! hash {
 
 [source,rust]
 ----
-op!(self:Point + p2:Point, {
+op!(self:Point + other:Point, {
     Point {
-        x: self.x + p2.x,
-        y: self.y + p2.y,
+        x: self.x + other.x,
+        y: self.y + other.y,
     }
 });
 ----
@@ -117,7 +111,7 @@ $block:block) => {
 ----
 macro_rules! op {
     (+, $_self:ident : $typ:ty, $block:block) => {
-        impl $crate::std::ops::Add for $typ {
+        impl ::std::ops::Add for $typ {
             type Output = $typ;
 
             fn add($_self, other: $typ) -> Self { // <1>
@@ -155,17 +149,68 @@ error[E0425]: cannot find value `other` in this scope
    |                     ^^^^^ not found in this scope
 ----
 
+=== Debugging macros: trace macros
+
+[source,rust]
+----
+#![feature(trace_macros)]
+trace_macros!(true);
+----
+
+----
+note: trace_macro
+   --> src/main.rs:185:1
+    |
+185 | / op!(+, self:Point, p2:Point, {
+186 | |     Point {
+187 | |         x: self.x + p2.x,
+188 | |         y: self.y + p2.y,
+189 | |     }
+190 | | });
+    | |___^
+    |
+    = note: expanding `op! { + , self : Point , p2 : Point , {
+            Point { x : self . x + p2 . x , y : self . y + p2 . y , } } }`
+    = note: to `impl $crate :: std :: ops :: Add for Point {
+            type Output = Point ; fn add ( self , p2 : Point ) -> Self {
+            { Point{x: self.x + p2.x, y: self.y + p2.y,} } } }`
+----
+
+=== Debugging macros: log syntax
+
+[source,rust]
+----
+#![feature(log_syntax)]
+
+macro_rules! op {
+    (+, $_self:ident : $typ1:ty, $other:ident : $typ2:ty, $block:block) => {
+        log_syntax!($typ1);               <1>
+
+        impl $crate::std::ops::Add for $typ1 {
+            type Output = $typ1;
+
+            fn add($_self, $other: $typ2) -> Self {
+                $block
+            }
+        }
+    };
+}
+----
+<1> Will print `Point` at compile time
+
 === Real-world Example
 
 [source,rust]
 ----
 #[macro_export]
 macro_rules! connect {
-    // Connect to a GTK+ widget event, sending a message to another widget.
-    ($widget:expr, $event:ident($($args:pat),*), $other_component:expr, $msg:expr) => {
+    ($widget:expr, $event:ident($($args:pat),*),
+        $other_component:expr, $msg:expr) =>
+    {
         let stream = $other_component.stream().clone();
         $widget.$event(move |$($args),*| {
-            let msg: Option<_> = $crate::IntoOption::into_option($msg);
+            let msg: Option<_> =
+                $crate::IntoOption::into_option($msg);
             if let Some(msg) = msg {
                 stream.emit(msg);
             }
@@ -180,16 +225,16 @@ macro_rules! connect {
 [source,rust]
 ----
     // […]
-    ($src_component:ident @ $message:pat, $dst_component:expr, $msg:expr) => {
+    ($src_component:ident @ $message:pat, $dst_component:expr,
+        $msg:expr) =>
+    {
         let stream = $dst_component.stream().clone();
         $src_component.stream().observe(move |msg| {
-            #[allow(unreachable_patterns)]
             match msg {
                 &$message =>  {
-                    let msg: Option<_> = $crate::IntoOption::into_option($msg);
-                    if let Some(msg) = msg {
-                        stream.emit(msg);
-                    }
+                    let msg: Option<_> =
+                        $crate::IntoOption::into_option($msg);
+                    if let Some(msg) = msg { stream.emit(msg); }
                 },
                 _ => (),
             }
