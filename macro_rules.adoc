@@ -198,6 +198,12 @@ macro_rules! op {
 ----
 <1> Will print `Point` at compile time
 
+=== Macros vs Generics
+
+ * Generics: the code is the same for different types
+ * Macros: shortcut for a piece of code
+ * Macros: manipulate the AST
+
 === Real-world Example
 
 [source,rust]
