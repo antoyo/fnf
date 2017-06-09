@@ -54,7 +54,7 @@ struct Person {
 
 impl Person {
     fn full_name(&self) -> String { // <2> <3>
-        self.firstname + " " + &self.lastname
+        format!("{} {}", self.firstname, self.lastname)
     }
 }
 ----
@@ -66,8 +66,8 @@ impl Person {
 
 [source, rust]
 ----
-let lastname = "Hoare";
-let firstname = "Graydon";
+let lastname = "Hoare".to_string();
+let firstname = "Graydon".to_string();
 let person = Person {
     age: 42,
     lastname: lastname,

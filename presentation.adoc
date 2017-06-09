@@ -5,7 +5,6 @@
 
 include::introduction.adoc[]
 
-// TODO: check if the code compile.
 include::basics.adoc[]
 
 include::traits.adoc[]
