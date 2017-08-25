@@ -1,0 +1,37 @@
+== Iterators
+
+ * High-level, but zero cost
+ * Adapters, like `filter` and `map`
+ * Used in `for` loops
+ * Immutability
+ * `Iterator` trait
+
+=== Example
+
+[source, rust]
+----
+let string = b"RustConf, August 18-19 | Portland";
+let string: String = <1> <2>
+    string.iter() <3>
+        .map(|byte| byte.to_ascii_uppercase())
+        .take_while(|&byte| byte != b'|') <4>
+        .map(|byte| byte as char)
+        .filter(|&ch| ch.is_alphanumeric())
+        .collect();
+----
+<1> Immutable variable
+<2> Type annotation for `collect()`
+<3> Get an iterator
+<4> Pattern match against `&byte`
+
+=== Example with `for` loop
+
+[source, rust]
+----
+for (&ch, index) in string.iter().zip(0..).skip(5) { <1>
+    if index < 20 {
+        print!("{}", ch as char);
+    }
+}
+----
+<1> `0..` is an infinite `Range`

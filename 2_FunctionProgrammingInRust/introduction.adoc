@@ -1,0 +1,12 @@
+== Plan
+
+ * Basics of Rust
+ * Traits
+ * Generics
+ * Error handling
+ * Closures
+ * Iterators
+ * Memory management
+ * Exercices
+
+// TODO: remove

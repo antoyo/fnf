@@ -1,0 +1,11 @@
+== Memory management
+
+ * Automatic memory management (without garbage collector)
+ * Memory allocated on the stack by default
+ * `Box` to allocate memory on the heap
+// No need to call free.
+ * References (`&` and `&mut`)
+ * Ownership
+ * Move semantics
+ * Lifetime to determine where to deallocate memory
+// You'll get many compile-time errors when you start using Rust, but if you used Haskell, you'll be fine with that (except that you won't have your beloved monads). 

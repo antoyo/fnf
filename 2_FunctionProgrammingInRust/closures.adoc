@@ -1,0 +1,53 @@
+== Closures
+
+ * Function without name
+ * Type inference
+ * Can have an environment
+ * Allocated on the stack by default
+
+=== Example
+
+[source, rust]
+----
+let inc_opt = optional.map(|num| num + 1); // <1>
+
+fn sum_string(str1: &str, str2: &str) -> Result<i32, ParseIntError> {
+    str1.parse()
+        .and_then(|num1: i32| -> Result<i32, _> { // <2> <3>
+            let num2: i32 = str2.parse()?;
+            Ok(num1 + num2)
+        })
+}
+----
+<1> Closure incrementing a number
+<2> Argument and return types
+<3> Block of code
+
+=== Function as a parameter
+
+// We name the function fmap instead of map because we made the same mistake as Haskell.
+[source, rust]
+----
+trait Functor {
+    fn fmap<F, O>(&self, func: F) -> O
+    where F: Fn(&Self) -> O; <1>
+}
+
+let two = 2;
+println!("{:?}", 40.fmap(|num| (num + two).to_string())); <2>
+----
+<1> Generic parameter that must implement this `Fn` trait
+<2> Capture the variable `two`
+
+=== Return a closure
+
+[source, rust]
+----
+fn compose<A, B, C, F, G>(f: F, g: G) -> Box<Fn(A) -> C> <1>
+where F: Fn(A) -> B + 'static,
+      G: Fn(B) -> C + 'static,
+{
+    Box::new(move |value| g(f(value)))
+}
+----
+<1> The most common way to return a closure on stable Rust is to `Box` it

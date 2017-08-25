@@ -1,0 +1,154 @@
+== Error Handling
+
+ * Option
+ * Result
+ * Macros
+ * No null
+ * No exceptions
+
+=== Option
+
+ * Encode the absence of value in the type itself
+ * Cannot access the value directly
+ * Like the `Maybe` type in Haskell
+
+=== Example
+
+[source, rust]
+----
+let vector = vec![1, 2, 3];
+let value =
+    match vector.first() {
+        Some(value) => value + 1,
+        None => 0,
+    };
+----
+
+=== Combinators
+
+[source, rust]
+----
+optional.unwrap_or(0)
+
+optional.unwrap_or_default()
+
+optional.map(i32::abs)
+
+optional.map_or(0, i32::abs)
+
+optional.and_then(parse_int)
+
+optional.cloned()
+----
+
+=== Result
+
+// The #[must_use] attribute means that we must use the result, which is a good idea since we want to manage errors.
+// So, it triggers a warning if we don't use it.
+// Since it's only a warning, we can ignore it. Who cares about errors anyway?
+
+ * Encode the error in the type
+ * `#[must_use]`
+ * Like the `Either` type in Haskell
+ * Combinators
+
+=== Example
+
+[source, rust]
+----
+match "42".parse::<i32>() {
+    Ok(value) => println!("{}", value),
+    Err(error) => println!("Error: {}", error),
+}
+----
+
+=== The `?` operator
+
+ * Get the result or return the error if any
+ * Shortcut for pattern matching
+ * Useful when you have multiple `Result`s, especially of different types.
+
+=== Example
+
+[source, rust]
+----
+fn sum_string(str1: &str, str2: &str) -> Result<i32, ParseIntError> {
+    let num1: i32 = str1.parse()?;
+    let num2: i32 = str2.parse()?;
+    Ok(num1 + num2)
+}
+----
+
+[source, rust]
+----
+fn sum_string(str1: &str, str2: &str) -> Result<i32, ParseIntError> {
+    let num1: i32 =
+        match str1.parse() {
+            Ok(num) => num,
+            Err(error) => return Err(error),
+        };
+    let num2: i32 =
+        match str2.parse() {
+            Ok(num) => num,
+            Err(error) => return Err(error),
+        };
+    Ok(num1 + num2)
+}
+----
+
+=== No Exceptions
+
+=== Panics
+
+ * Panic the thread
+ ** Unwind the stack (default)
+ ** Abort
+
+[source, rust]
+----
+panic!("don't panic");
+
+let string = "rebar";
+if string.parse::<i32>().is_err() {
+    panic!("Cannot parse: {}", string);
+}
+----
+
+=== Other macros
+
+[source, rust]
+----
+unimplemented!()
+
+unreachable!()
+
+assert!()
+
+assert_eq!()
+
+assert_ne!()
+
+// (and their `debug_*` variants)
+----
+
+=== Backtrace (`RUST_BACKTRACE=1`)
+
+[source, bash]
+----
+thread 'main' panicked at 'Cannot parse: rebar', src/main.rs:136:8
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+# with RUST_BACKTRACE=1
+thread 'main' panicked at 'Cannot parse: rebar', src/main.rs:136:8
+stack backtrace:
+# […]
+   7: functional_rust::main
+             at src/main.rs:136
+   8: __rust_maybe_catch_panic
+             at /checkout/src/libpanic_unwind/lib.rs:98
+   9: std::rt::lang_start
+             at /checkout/src/libstd/panicking.rs:459
+             at /checkout/src/libstd/panic.rs:361
+             at /checkout/src/libstd/rt.rs:61
+  10: main
+# […]
+----

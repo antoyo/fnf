@@ -1,0 +1,132 @@
+== Traits
+
+ * Ad-hoc polymorphism (function/operator overloading)
+ * A set of methods and types that can be defined for a type
+ * Useful for generic functions
+ * Very similar to typeclasses in Haskell
+ * Similar to interfaces in OO languages
+
+=== Example of traits
+
+ * Display
+ * Debug
+ * Eq
+ * Ord
+ * Add
+ * Sub
+ * Mul
+
+=== The Debug trait
+
+[source,rust]
+----
+#[derive(Debug)]
+enum List {
+    Empty,
+    Cons(Point, Box<List>),
+}
+
+use List::{Cons, Empty};
+----
+
+[source,rust]
+----
+let p1 = Point::new(1, 2);
+let p2 = Point::new(2, 3);
+let p3 = Point::new(3, 4);
+let p4 = Point::new(4, 5);
+println!("{:?}", Cons(p1, Box::new(Cons(p2, Box::new(Cons(p3,
+    Box::new(Cons(p4, Box::new(Empty)))))))));
+----
+
+----
+Cons(Point { x: 1, y: 2 }, Cons(Point { x: 2, y: 3 }, Cons(Point { x: 3, y: 4 }, Cons(Point { x: 4, y: 5 }, Empty))))
+----
+
+=== The Debug Trait (continued)
+
+[source,rust]
+----
+println!("{:#?}", Cons(p1, Box::new(Cons(p2, Box::new(Cons(p3, // <1>
+    Box::new(Cons(p4, Box::new(Empty)))))))));
+----
+<1> Usage of `{:#?}` instead of `{:?}`
+
+----
+Cons(
+    Point {
+        x: 1,
+        y: 2
+    },
+    Cons(
+        Point {
+            x: 2,
+            y: 3
+        },
+        Cons(
+            Point {
+                x: 3,
+                y: 4
+            },
+            Cons(
+                Point {
+                    x: 4,
+                    y: 5
+                },
+                Empty
+            )
+        )
+    )
+)
+----
+
+=== Rules of trait implementations
+
+ * The trait must be in scope to use its methods
+ * Either the type or the trait must be defined in the same crate as the implementation
+
+=== Example
+
+[source,rust]
+----
+trait Read {
+    fn read(string: &str) -> Self;
+}
+
+impl Read for i32 {
+    fn read(string: &str) -> Self {
+        string.parse().unwrap()
+    }
+}
+----
+
+=== More about traits
+
+[source,rust]
+----
+trait Equal {
+    fn equal(&self, other: &Self) -> bool;
+
+    fn not_equal(&self, other: &Self) -> bool { // <1>
+        !self.equal(other)
+    }
+}
+
+trait Ordered : Equal { // <2>
+    fn lesser_than_or_equal(&self, other: &Self) -> bool;
+
+    fn lesser_than(&self, other: &Self) -> bool {
+        !self.greater_than_or_equal(other)
+    }
+
+    fn greater_than(&self, other: &Self) -> bool {
+        !self.lesser_than_or_equal(other)
+    }
+
+    fn greater_than_or_equal(&self, other: &Self) -> bool {
+        self.greater_than(other) || self.equal(other)
+    }
+}
+----
+<1> Default implementation of the method
+<2> The types implementing `Ordered` must also implement `Equal`

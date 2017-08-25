@@ -1,0 +1,27 @@
+= Introduction to Rust
+:source-highlighter: pygments
+:pygments-style: monokai
+:imagesdir: ./images
+
+// TODO: add notes to source code.
+
+include::introduction.adoc[]
+
+include::basics.adoc[]
+
+include::traits.adoc[]
+
+include::generics.adoc[]
+
+// TODO: Move after closure (to simplify the combinator section)?
+include::errors.adoc[]
+
+include::closures.adoc[]
+
+include::iterators.adoc[]
+
+include::memory.adoc[]
+
+include::conclusion.adoc[]
+
+include::exercises.adoc[]
