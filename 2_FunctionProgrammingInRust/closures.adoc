@@ -7,6 +7,9 @@
 
 === Example
 
+// The sum_string function returns the sum of two strings, as a number.
+// You know, this trick you can do in languages like JavaScript.
+
 [source, rust]
 ----
 let inc_opt = optional.map(|num| num + 1);         // <1>

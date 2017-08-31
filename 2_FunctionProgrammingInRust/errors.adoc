@@ -24,7 +24,7 @@ let value =
     };
 ----
 
-=== Combinators
+=== Methods
 
 [source, rust]
 ----
@@ -50,7 +50,7 @@ optional.cloned()
  * Encode the error in the type
  * `#[must_use]`
  * Like the `Either` type in Haskell
- * Combinators
+ * Methods similar to `Option`
 
 === Example
 
