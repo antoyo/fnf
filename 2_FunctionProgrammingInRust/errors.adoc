@@ -66,7 +66,7 @@ match "42".parse::<i32>() {
 
  * Get the result or return the error if any
  * Shortcut for pattern matching
- * Useful when you have multiple `Result`s, especially of different types.
+ * Useful when you have multiple `Result` s, especially of different types.
 
 === Example
 

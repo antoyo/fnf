@@ -8,5 +8,3 @@
  * Iterators
  * Memory management
  * Exercices
-
-// TODO: remove

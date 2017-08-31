@@ -1,4 +1,4 @@
-= Introduction to Rust
+= Functional Programming in Rust
 :source-highlighter: pygments
 :pygments-style: monokai
 :imagesdir: ./images

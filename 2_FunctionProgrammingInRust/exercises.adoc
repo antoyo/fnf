@@ -2,12 +2,14 @@
 
 http://www.rust-tutorials.com/RustConf17/
 
-// TODO: check if beginnner tutorial is indeed about references.
- * Beginner: references
- * Intermediate: threads
- * Advanced: lifetimes
+ * Beginner: ownership & references
+ * Intermediate: traits & threads
+ * Advanced: lifetimes & borrow checker
+ ** Successful borrowing
+ ** Named lifetime parameters #3
+ ** (don't do "Lifetimes as part of the type")
 
-*Reminder*
+=== Reminder
 
  * Either one mutable reference
  * Or many immutable references

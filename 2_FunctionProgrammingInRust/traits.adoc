@@ -112,7 +112,7 @@ trait Equal {
     }
 }
 
-trait Ordered : Equal { // <2>
+trait Ordered : Equal {                         // <2>
     fn lesser_than_or_equal(&self, other: &Self) -> bool;
 
     fn lesser_than(&self, other: &Self) -> bool {
