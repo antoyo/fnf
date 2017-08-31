@@ -1,0 +1,672 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>Introduction to Rust</title><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" name="viewport"><link href="reveal.js/css/reveal.css" rel="stylesheet"><link rel="stylesheet" href="reveal.js/css/theme/black.css" id="theme"><style>.listingblock .pygments .hll { background-color: #49483e }
+.listingblock .pygments, .listingblock .pygments code { background: #272822; color: #f8f8f2 }
+.listingblock .pygments .tok-c { color: #75715e } /* Comment */
+.listingblock .pygments .tok-err { color: #960050; background-color: #1e0010 } /* Error */
+.listingblock .pygments .tok-k { color: #66d9ef } /* Keyword */
+.listingblock .pygments .tok-l { color: #ae81ff } /* Literal */
+.listingblock .pygments .tok-n { color: #f8f8f2 } /* Name */
+.listingblock .pygments .tok-o { color: #f92672 } /* Operator */
+.listingblock .pygments .tok-p { color: #f8f8f2 } /* Punctuation */
+.listingblock .pygments .tok-ch { color: #75715e } /* Comment.Hashbang */
+.listingblock .pygments .tok-cm { color: #75715e } /* Comment.Multiline */
+.listingblock .pygments .tok-cp { color: #75715e } /* Comment.Preproc */
+.listingblock .pygments .tok-cpf { color: #75715e } /* Comment.PreprocFile */
+.listingblock .pygments .tok-c1 { color: #75715e } /* Comment.Single */
+.listingblock .pygments .tok-cs { color: #75715e } /* Comment.Special */
+.listingblock .pygments .tok-gd { color: #f92672 } /* Generic.Deleted */
+.listingblock .pygments .tok-ge { font-style: italic } /* Generic.Emph */
+.listingblock .pygments .tok-gi { color: #a6e22e } /* Generic.Inserted */
+.listingblock .pygments .tok-gs { font-weight: bold } /* Generic.Strong */
+.listingblock .pygments .tok-gu { color: #75715e } /* Generic.Subheading */
+.listingblock .pygments .tok-kc { color: #66d9ef } /* Keyword.Constant */
+.listingblock .pygments .tok-kd { color: #66d9ef } /* Keyword.Declaration */
+.listingblock .pygments .tok-kn { color: #f92672 } /* Keyword.Namespace */
+.listingblock .pygments .tok-kp { color: #66d9ef } /* Keyword.Pseudo */
+.listingblock .pygments .tok-kr { color: #66d9ef } /* Keyword.Reserved */
+.listingblock .pygments .tok-kt { color: #66d9ef } /* Keyword.Type */
+.listingblock .pygments .tok-ld { color: #e6db74 } /* Literal.Date */
+.listingblock .pygments .tok-m { color: #ae81ff } /* Literal.Number */
+.listingblock .pygments .tok-s { color: #e6db74 } /* Literal.String */
+.listingblock .pygments .tok-na { color: #a6e22e } /* Name.Attribute */
+.listingblock .pygments .tok-nb { color: #f8f8f2 } /* Name.Builtin */
+.listingblock .pygments .tok-nc { color: #a6e22e } /* Name.Class */
+.listingblock .pygments .tok-no { color: #66d9ef } /* Name.Constant */
+.listingblock .pygments .tok-nd { color: #a6e22e } /* Name.Decorator */
+.listingblock .pygments .tok-ni { color: #f8f8f2 } /* Name.Entity */
+.listingblock .pygments .tok-ne { color: #a6e22e } /* Name.Exception */
+.listingblock .pygments .tok-nf { color: #a6e22e } /* Name.Function */
+.listingblock .pygments .tok-nl { color: #f8f8f2 } /* Name.Label */
+.listingblock .pygments .tok-nn { color: #f8f8f2 } /* Name.Namespace */
+.listingblock .pygments .tok-nx { color: #a6e22e } /* Name.Other */
+.listingblock .pygments .tok-py { color: #f8f8f2 } /* Name.Property */
+.listingblock .pygments .tok-nt { color: #f92672 } /* Name.Tag */
+.listingblock .pygments .tok-nv { color: #f8f8f2 } /* Name.Variable */
+.listingblock .pygments .tok-ow { color: #f92672 } /* Operator.Word */
+.listingblock .pygments .tok-w { color: #f8f8f2 } /* Text.Whitespace */
+.listingblock .pygments .tok-mb { color: #ae81ff } /* Literal.Number.Bin */
+.listingblock .pygments .tok-mf { color: #ae81ff } /* Literal.Number.Float */
+.listingblock .pygments .tok-mh { color: #ae81ff } /* Literal.Number.Hex */
+.listingblock .pygments .tok-mi { color: #ae81ff } /* Literal.Number.Integer */
+.listingblock .pygments .tok-mo { color: #ae81ff } /* Literal.Number.Oct */
+.listingblock .pygments .tok-sa { color: #e6db74 } /* Literal.String.Affix */
+.listingblock .pygments .tok-sb { color: #e6db74 } /* Literal.String.Backtick */
+.listingblock .pygments .tok-sc { color: #e6db74 } /* Literal.String.Char */
+.listingblock .pygments .tok-dl { color: #e6db74 } /* Literal.String.Delimiter */
+.listingblock .pygments .tok-sd { color: #e6db74 } /* Literal.String.Doc */
+.listingblock .pygments .tok-s2 { color: #e6db74 } /* Literal.String.Double */
+.listingblock .pygments .tok-se { color: #ae81ff } /* Literal.String.Escape */
+.listingblock .pygments .tok-sh { color: #e6db74 } /* Literal.String.Heredoc */
+.listingblock .pygments .tok-si { color: #e6db74 } /* Literal.String.Interpol */
+.listingblock .pygments .tok-sx { color: #e6db74 } /* Literal.String.Other */
+.listingblock .pygments .tok-sr { color: #e6db74 } /* Literal.String.Regex */
+.listingblock .pygments .tok-s1 { color: #e6db74 } /* Literal.String.Single */
+.listingblock .pygments .tok-ss { color: #e6db74 } /* Literal.String.Symbol */
+.listingblock .pygments .tok-bp { color: #f8f8f2 } /* Name.Builtin.Pseudo */
+.listingblock .pygments .tok-fm { color: #a6e22e } /* Name.Function.Magic */
+.listingblock .pygments .tok-vc { color: #f8f8f2 } /* Name.Variable.Class */
+.listingblock .pygments .tok-vg { color: #f8f8f2 } /* Name.Variable.Global */
+.listingblock .pygments .tok-vi { color: #f8f8f2 } /* Name.Variable.Instance */
+.listingblock .pygments .tok-vm { color: #f8f8f2 } /* Name.Variable.Magic */
+.listingblock .pygments .tok-il { color: #ae81ff } /* Literal.Number.Integer.Long */</style><link href="reveal.js/lib/css/zenburn.css" rel="stylesheet"><script>document.write( '<link rel="stylesheet" href="reveal.js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );</script></head><body><div class="reveal"><div class="slides"><section class="title"><h1>Introduction to Rust</h1></section><section id="_plan"><h2>Plan</h2><div class="ulist"><ul><li><p>Basics of Rust</p></li><li><p>Traits</p></li><li><p>Generics</p></li><li><p>Macro rules</p></li><li><p>Custom derive</p></li><li><p>Quiz</p></li><li><p>Surprise</p></li></ul></div></section>
+<section><section id="_rust"><h2>Rust</h2><div class="ulist"><ul><li><p>Designed by Mozilla, released in 2010</p></li><li><p>Multi-paradigm (imperative, functional, concurrent)</p></li><li><p>Static and strongly typed (with type inference)</p></li><li><p>Safe</p></li><li><p>Low-level</p></li><li><p>Automatic memory management (without garbage collector)</p></li><li><p>Servo web engine</p></li></ul></div></section><section id="_strengths_of_rust"><h2>Strengths of Rust</h2><div class="ulist"><ul><li><p>Zero-cost abstractions</p></li><li><p>Concurrent programming</p></li><li><p>Safe:</p><div class="ulist"><ul><li><p>No null pointers</p></li><li><p>No use after free</p></li><li><p>No use before initialization</p></li><li><p>Immutable variables by default</p></li><li><p>No memory leaks</p></li></ul></div></li></ul></div></section><section id="_hello_world"><h2>Hello World!</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-k">fn</span> <span class="tok-nf">main</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-n">println</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;Hello World!&quot;</span><span class="tok-p">);</span><span class="tok-w"> </span><b>(1)</b>
+<span class="tok-p">}</span><span class="tok-w"></span></code></pre></div></div>
+<div class="colist arabic"><ol><li><p><code>println!</code> is a macro.</p></li></ol></div></section><section id="_variable"><h2>Variable</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">number</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">i32</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mi">42</span><span class="tok-p">;</span><span class="tok-w"> </span><b>(1)</b>
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">number</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mi">42</span><span class="tok-p">;</span><span class="tok-w">      </span><b>(2)</b>
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-n">number</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mi">24</span><span class="tok-p">;</span><span class="tok-w"> </span> <b>(3)</b></code></pre></div></div>
+<div class="colist arabic"><ol><li><p>32-bit signed integer variable</p></li><li><p>specifying the type is optional thanks to type inference</p></li><li><p>mutable variable</p></li></ol></div></section><section id="_structure"><h2>Structure</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-k">struct</span> <span class="tok-nc">Person</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-n">firstname</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nb">String</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-n">lastname</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nb">String</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-n">age</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">u8</span><span class="tok-p">,</span><span class="tok-w">                         </span><b>(1)</b>
+<span class="tok-p">}</span><span class="tok-w"></span>
+
+<span class="tok-k">impl</span><span class="tok-w"> </span><span class="tok-n">Person</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">full_name</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-bp">self</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-nb">String</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><b>(2)</b> <b>(3)</b>
+<span class="tok-w">        </span><span class="tok-n">format</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;{} {}&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-n">firstname</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-n">lastname</span><span class="tok-p">)</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-p">}</span><span class="tok-w"></span></code></pre></div></div>
+<div class="colist arabic"><ol><li><p>8-bit unsigned integer</p></li><li><p><code>self</code> is the current instance</p></li><li><p><code>&amp;</code> specify that self is passed by reference</p></li></ol></div></section><section id="_use_of_structures"><h2>Use of structures</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">lastname</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;Hoare&quot;</span><span class="tok-p">.</span><span class="tok-n">to_string</span><span class="tok-p">();</span><span class="tok-w"></span>
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">firstname</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;Graydon&quot;</span><span class="tok-p">.</span><span class="tok-n">to_string</span><span class="tok-p">();</span><span class="tok-w"></span>
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">person</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Person</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-n">age</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mi">42</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-n">lastname</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">lastname</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-n">firstname</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-p">};</span><span class="tok-w"></span>
+
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">full_name</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">person</span><span class="tok-p">.</span><span class="tok-n">full_name</span><span class="tok-p">();</span><span class="tok-w"></span></code></pre></div></div></section><section id="_attribute"><h2>Attribute</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-cp">#[derive(Clone)]</span><span class="tok-w"></span>
+<span class="tok-k">struct</span> <span class="tok-nc">Person</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-n">firstname</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nb">String</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-n">lastname</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nb">String</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-n">age</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">u8</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-p">}</span><span class="tok-w"></span></code></pre></div></div></section><section id="_pattern_matching"><h2>Pattern matching</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-k">match</span><span class="tok-w"> </span><span class="tok-n">number</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-mi">1</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"> </span><span class="tok-n">println</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;one&quot;</span><span class="tok-p">),</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-mi">2</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"> </span><span class="tok-n">println</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;two&quot;</span><span class="tok-p">),</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-mi">3</span><span class="tok-w"> </span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-mi">4</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"> </span><span class="tok-n">println</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;three or four&quot;</span><span class="tok-p">),</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-mi">5</span><span class="tok-w"> </span><span class="tok-p">...</span><span class="tok-w"> </span><span class="tok-mi">10</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"> </span><span class="tok-n">println</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;between 5 and 10&quot;</span><span class="tok-p">),</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-n">_</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"> </span><span class="tok-n">println</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;other&quot;</span><span class="tok-p">),</span><span class="tok-w"></span>
+<span class="tok-p">}</span><span class="tok-w"></span></code></pre></div></div></section><section id="_pattern_matching_destructuring"><h2>Pattern matching (destructuring)</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-k">enum</span> <span class="tok-nc">List</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-n">Empty</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-n">Cons</span><span class="tok-p">(</span><span class="tok-kt">i32</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nb">Box</span><span class="tok-o">&lt;</span><span class="tok-n">List</span><span class="tok-o">&gt;</span><span class="tok-p">),</span><span class="tok-w"></span>
+<span class="tok-p">}</span><span class="tok-w"></span>
+
+<span class="tok-k">fn</span> <span class="tok-nf">sum_list</span><span class="tok-p">(</span><span class="tok-n">list</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-n">List</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-kt">i32</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-k">match</span><span class="tok-w"> </span><span class="tok-o">*</span><span class="tok-n">list</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-n">List</span><span class="tok-o">::</span><span class="tok-n">Empty</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-n">List</span><span class="tok-o">::</span><span class="tok-n">Cons</span><span class="tok-p">(</span><span class="tok-n">element</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-k">ref</span><span class="tok-w"> </span><span class="tok-n">rest</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"></span>
+<span class="tok-w">            </span><span class="tok-n">element</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">sum_list</span><span class="tok-p">(</span><span class="tok-n">rest</span><span class="tok-p">),</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-p">}</span><span class="tok-w"></span></code></pre></div></div></section><section id="_pattern_matching_code_if_code"><h2>Pattern matching (<code>if</code>)</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-k">fn</span> <span class="tok-nf">is_empty</span><span class="tok-p">(</span><span class="tok-n">list</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-n">List</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-kt">bool</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">List</span><span class="tok-o">::</span><span class="tok-n">Empty</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-o">*</span><span class="tok-n">list</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-kc">true</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-kc">false</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-p">}</span><span class="tok-w"></span></code></pre></div></div></section><section id="_expressions"><h2>Expressions</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">text</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-n">number</span><span class="tok-w"> </span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-mi">42</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">      </span><b>(1)</b>
+<span class="tok-w">        </span><span class="tok-s">&quot;greater than 42&quot;</span><span class="tok-w"> </span><b>(2)</b>
+<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-s">&quot;lesser than or equal to 42&quot;</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">};</span><span class="tok-w"></span></code></pre></div></div>
+<div class="colist arabic"><ol><li><p><code>if</code> is an expression</p></li><li><p>no semicolon</p></li></ol></div></section><section id="_function"><h2>Function</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-k">fn</span> <span class="tok-nf">max</span><span class="tok-p">(</span><span class="tok-n">number1</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">i32</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">number2</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">i32</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-kt">i32</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-n">number1</span><span class="tok-w"> </span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">number2</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-n">number1</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-n">number2</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-p">}</span><span class="tok-w"></span></code></pre></div></div></section></section>
+<section><section id="_traits"><h2>Traits</h2><div class="ulist"><ul><li><p>Ad-hoc polymorphism (function/operator overloading)</p></li><li><p>A set of methods and types that can be defined for a type</p></li><li><p>Useful for generic functions</p></li><li><p>Similar to interfaces in OO languages</p></li></ul></div></section><section id="_example_of_traits"><h2>Example of traits</h2><div class="ulist"><ul><li><p>Display</p></li><li><p>Debug</p></li><li><p>Eq</p></li><li><p>Ord</p></li><li><p>Add</p></li><li><p>Sub</p></li><li><p>Mul</p></li></ul></div></section><section id="_the_debug_trait"><h2>The Debug trait</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-cp">#[derive(Debug)]</span><span class="tok-w"></span>
+<span class="tok-k">enum</span> <span class="tok-nc">List</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-n">Empty</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-n">Cons</span><span class="tok-p">(</span><span class="tok-n">Point</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nb">Box</span><span class="tok-o">&lt;</span><span class="tok-n">List</span><span class="tok-o">&gt;</span><span class="tok-p">),</span><span class="tok-w"></span>
+<span class="tok-p">}</span><span class="tok-w"></span>
+
+<span class="tok-k">use</span><span class="tok-w"> </span><span class="tok-n">List</span><span class="tok-o">::</span><span class="tok-p">{</span><span class="tok-n">Cons</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Empty</span><span class="tok-p">};</span><span class="tok-w"></span></code></pre></div></div>
+<div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">p1</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Point</span><span class="tok-o">::</span><span class="tok-n">new</span><span class="tok-p">(</span><span class="tok-mi">1</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">2</span><span class="tok-p">);</span><span class="tok-w"></span>
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">p2</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Point</span><span class="tok-o">::</span><span class="tok-n">new</span><span class="tok-p">(</span><span class="tok-mi">2</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">3</span><span class="tok-p">);</span><span class="tok-w"></span>
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">p3</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Point</span><span class="tok-o">::</span><span class="tok-n">new</span><span class="tok-p">(</span><span class="tok-mi">3</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">4</span><span class="tok-p">);</span><span class="tok-w"></span>
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">p4</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Point</span><span class="tok-o">::</span><span class="tok-n">new</span><span class="tok-p">(</span><span class="tok-mi">4</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">5</span><span class="tok-p">);</span><span class="tok-w"></span>
+<span class="tok-n">println</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;{:?}&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Cons</span><span class="tok-p">(</span><span class="tok-n">p1</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nb">Box</span><span class="tok-o">::</span><span class="tok-n">new</span><span class="tok-p">(</span><span class="tok-n">Cons</span><span class="tok-p">(</span><span class="tok-n">p2</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nb">Box</span><span class="tok-o">::</span><span class="tok-n">new</span><span class="tok-p">(</span><span class="tok-n">Cons</span><span class="tok-p">(</span><span class="tok-n">p3</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-nb">Box</span><span class="tok-o">::</span><span class="tok-n">new</span><span class="tok-p">(</span><span class="tok-n">Cons</span><span class="tok-p">(</span><span class="tok-n">p4</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nb">Box</span><span class="tok-o">::</span><span class="tok-n">new</span><span class="tok-p">(</span><span class="tok-n">Empty</span><span class="tok-p">)))))))));</span><span class="tok-w"></span></code></pre></div></div>
+<div class="listingblock"><div class="content"><pre class="pygments highlight"><code>Cons(Point { x: 1, y: 2 }, Cons(Point { x: 2, y: 3 }, Cons(Point { x: 3, y: 4 }, Cons(Point { x: 4, y: 5 }, Empty))))</code></pre></div></div></section><section id="_the_debug_trait_continued"><h2>The Debug Trait (continued)</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-n">println</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;{:#?}&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Cons</span><span class="tok-p">(</span><span class="tok-n">p1</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nb">Box</span><span class="tok-o">::</span><span class="tok-n">new</span><span class="tok-p">(</span><span class="tok-n">Cons</span><span class="tok-p">(</span><span class="tok-n">p2</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nb">Box</span><span class="tok-o">::</span><span class="tok-n">new</span><span class="tok-p">(</span><span class="tok-n">Cons</span><span class="tok-p">(</span><span class="tok-n">p3</span><span class="tok-p">,</span><span class="tok-w"> </span><b>(1)</b>
+<span class="tok-w">    </span><span class="tok-nb">Box</span><span class="tok-o">::</span><span class="tok-n">new</span><span class="tok-p">(</span><span class="tok-n">Cons</span><span class="tok-p">(</span><span class="tok-n">p4</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nb">Box</span><span class="tok-o">::</span><span class="tok-n">new</span><span class="tok-p">(</span><span class="tok-n">Empty</span><span class="tok-p">)))))))));</span><span class="tok-w"></span></code></pre></div></div>
+<div class="colist arabic"><ol><li><p>Usage of <code>{:#?}</code> instead of <code>{:?}</code></p></li></ol></div>
+<div class="listingblock"><div class="content"><pre class="pygments highlight"><code>Cons(
+    Point {
+        x: 1,
+        y: 2
+    },
+    Cons(
+        Point {
+            x: 2,
+            y: 3
+        },
+        Cons(
+            Point {
+                x: 3,
+                y: 4
+            },
+            Cons(
+                Point {
+                    x: 4,
+                    y: 5
+                },
+                Empty
+            )
+        )
+    )
+)</code></pre></div></div></section><section id="_rules_of_trait_implementations"><h2>Rules of trait implementations</h2><div class="ulist"><ul><li><p>The trait must be in scope to use its methods</p></li><li><p>Either the type or the trait must be defined in the same crate as the implementation</p></li></ul></div></section><section id="_example"><h2>Example</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-k">trait</span><span class="tok-w"> </span><span class="tok-n">UniqueElem</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">unique_count</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-bp">self</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-kt">usize</span><span class="tok-p">;</span><span class="tok-w"></span>
+<span class="tok-p">}</span><span class="tok-w"></span>
+
+<span class="tok-k">impl</span><span class="tok-w"> </span><span class="tok-n">UniqueElem</span><span class="tok-w"> </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-n">HashSet</span><span class="tok-o">&lt;</span><span class="tok-kt">i32</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">unique_count</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-bp">self</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-kt">usize</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-n">len</span><span class="tok-p">()</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-p">}</span><span class="tok-w"></span></code></pre></div></div></section><section id="_more_about_traits"><h2>More about traits</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-k">trait</span><span class="tok-w"> </span><span class="tok-n">UniqueElem</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nb">IntoIterator</span><span class="tok-w">       </span><b>(1)</b>
+<span class="tok-w">    </span><span class="tok-k">where</span><span class="tok-w"> </span><span class="tok-n">Self</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nb">Sized</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-w">          </span><span class="tok-o">&lt;</span><span class="tok-n">Self</span><span class="tok-w"> </span><span class="tok-k">as</span><span class="tok-w"> </span><span class="tok-nb">IntoIterator</span><span class="tok-o">&gt;::</span><span class="tok-n">Item</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nb">Eq</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">Hash</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">unique_count</span><span class="tok-p">(</span><span class="tok-bp">self</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-kt">usize</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><b>(2)</b>
+<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">elems</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">HashSet</span><span class="tok-o">&lt;</span><span class="tok-n">_</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-n">into_iter</span><span class="tok-p">().</span><span class="tok-n">collect</span><span class="tok-p">();</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-n">elems</span><span class="tok-p">.</span><span class="tok-n">len</span><span class="tok-p">()</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-p">}</span><span class="tok-w"></span>
+
+<span class="tok-k">impl</span><span class="tok-w"> </span><span class="tok-n">UniqueElem</span><span class="tok-w"> </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-nb">Vec</span><span class="tok-o">&lt;</span><span class="tok-kt">i32</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"></span></code></pre></div></div>
+<div class="colist arabic"><ol><li><p>The types implementing <code>UniqueElem</code> must also implement <code>IntoIterator</code></p></li><li><p>Default implementation of the method</p></li></ol></div></section><section id="_real_world_example"><h2>Real-world Example</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-k">trait</span><span class="tok-w"> </span><span class="tok-n">Widget</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-k">where</span><span class="tok-w"> </span><span class="tok-n">Self</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nb">Clone</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-w">          </span><span class="tok-n">Self</span><span class="tok-o">::</span><span class="tok-n">Msg</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nb">Clone</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">DisplayVariant</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-k">type</span> <span class="tok-nc">Model</span><span class="tok-p">;</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-k">type</span> <span class="tok-nc">Msg</span><span class="tok-p">;</span><span class="tok-w"></span>
+
+<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">model</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-n">Self</span><span class="tok-o">::</span><span class="tok-n">Model</span><span class="tok-p">;</span><span class="tok-w"></span>
+
+<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">subscriptions</span><span class="tok-p">(</span><span class="tok-n">_relm</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-n">Relm</span><span class="tok-o">&lt;</span><span class="tok-n">Self</span><span class="tok-o">::</span><span class="tok-n">Msg</span><span class="tok-o">&gt;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
+
+<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">update</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-bp">self</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">event</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">Self</span><span class="tok-o">::</span><span class="tok-n">Msg</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">model</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-n">Self</span><span class="tok-o">::</span><span class="tok-n">Model</span><span class="tok-p">);</span><span class="tok-w"></span>
+
+<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">view</span><span class="tok-p">(</span><span class="tok-n">relm</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-n">RemoteRelm</span><span class="tok-o">&lt;</span><span class="tok-n">Self</span><span class="tok-o">&gt;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">model</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-n">Self</span><span class="tok-o">::</span><span class="tok-n">Model</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-n">Self</span><span class="tok-p">;</span><span class="tok-w"></span>
+<span class="tok-p">}</span><span class="tok-w"></span></code></pre></div></div></section></section>
+<section><section id="_generics"><h2>Generics</h2><div class="ulist"><ul><li><p>Parametric polymorphism (generic function or type)</p></li><li><p>Way to avoid code duplication</p></li><li><p>Static dispatch when using trait bounds</p></li></ul></div></section><section id="_attempt_at_creating_a_generic_function"><h2>Attempt at creating a generic function</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-k">fn</span> <span class="tok-nf">min</span><span class="tok-o">&lt;</span><span class="tok-n">T</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-n">a</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">T</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">b</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">T</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-n">T</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-n">a</span><span class="tok-w"> </span><span class="tok-o">&lt;</span><span class="tok-w"> </span><span class="tok-n">b</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-n">a</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-n">b</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-p">}</span><span class="tok-w"></span></code></pre></div></div>
+<div class="listingblock"><div class="content"><pre class="pygments highlight"><code>error[E0369]: binary operation `&lt;` cannot be applied to type `T`
+   --&gt; src/main.rs:227:8
+    |
+227 |     if a &lt; b {
+    |        ^^^^^
+    |
+    = note: an implementation of `std::cmp::PartialOrd` might be missing for `T`</code></pre></div></div></section><section id="_example_2"><h2>Example</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-k">fn</span> <span class="tok-nf">min</span><span class="tok-o">&lt;</span><span class="tok-n">T</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nb">PartialOrd</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-n">a</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">T</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">b</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">T</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-n">T</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><b>(1)</b>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-n">a</span><span class="tok-w"> </span><span class="tok-o">&lt;</span><span class="tok-w"> </span><span class="tok-n">b</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-n">a</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-n">b</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-p">}</span><span class="tok-w"></span>
+
+<span class="tok-n">println</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;{}&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">min</span><span class="tok-p">(</span><span class="tok-mi">24</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">42</span><span class="tok-p">));</span><span class="tok-w"></span></code></pre></div></div>
+<div class="colist arabic"><ol><li><p>The type <code>T</code> must implement <code>PartialOrd</code></p></li></ol></div></section><section id="_generic_type"><h2>Generic type</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-k">enum</span> <span class="tok-nc">List</span><span class="tok-o">&lt;</span><span class="tok-n">T</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-n">Empty</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-n">Cons</span><span class="tok-p">(</span><span class="tok-n">T</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nb">Box</span><span class="tok-o">&lt;</span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">T</span><span class="tok-o">&gt;&gt;</span><span class="tok-p">),</span><span class="tok-w"></span>
+<span class="tok-p">}</span><span class="tok-w"></span>
+
+<span class="tok-k">enum</span> <span class="tok-nc">List</span><span class="tok-o">&lt;</span><span class="tok-n">T</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nb">Eq</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-n">Empty</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-n">Cons</span><span class="tok-p">(</span><span class="tok-n">T</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nb">Box</span><span class="tok-o">&lt;</span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">T</span><span class="tok-o">&gt;&gt;</span><span class="tok-p">),</span><span class="tok-w"></span>
+<span class="tok-p">}</span><span class="tok-w"></span>
+
+<span class="tok-k">enum</span> <span class="tok-nc">List</span><span class="tok-o">&lt;</span><span class="tok-n">T</span><span class="tok-o">&gt;</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-k">where</span><span class="tok-w"> </span><span class="tok-n">T</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nb">Eq</span><span class="tok-w"></span>
+<span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-n">Empty</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-n">Cons</span><span class="tok-p">(</span><span class="tok-n">T</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nb">Box</span><span class="tok-o">&lt;</span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">T</span><span class="tok-o">&gt;&gt;</span><span class="tok-p">),</span><span class="tok-w"></span>
+<span class="tok-p">}</span><span class="tok-w"></span></code></pre></div></div></section><section id="_setting_the_generic_type"><h2>Setting the generic type</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">list</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Cons</span><span class="tok-o">::&lt;</span><span class="tok-kt">u8</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-mi">42</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nb">Box</span><span class="tok-o">::</span><span class="tok-n">new</span><span class="tok-p">(</span><span class="tok-n">Empty</span><span class="tok-o">::&lt;</span><span class="tok-kt">u8</span><span class="tok-o">&gt;</span><span class="tok-p">));</span><span class="tok-w"> </span><b>(1)</b>
+
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">list</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-kt">u8</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Cons</span><span class="tok-p">(</span><span class="tok-mi">42</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nb">Box</span><span class="tok-o">::</span><span class="tok-n">new</span><span class="tok-p">(</span><span class="tok-n">Empty</span><span class="tok-p">));</span><span class="tok-w"></span>
+
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">tail</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Empty</span><span class="tok-p">;</span><span class="tok-w">                                 </span><b>(2)</b>
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">list</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Cons</span><span class="tok-p">(</span><span class="tok-mi">42</span><span class="tok-k">u8</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nb">Box</span><span class="tok-o">::</span><span class="tok-n">new</span><span class="tok-p">(</span><span class="tok-n">tail</span><span class="tok-p">));</span><span class="tok-w"></span></code></pre></div></div>
+<div class="colist arabic"><ol><li><p>This looks like a fish <code>::&lt;&gt;</code></p></li><li><p>The compiler knows <code>tail</code> has type <code>List&lt;u8&gt;</code> because it is used with an <code>u8</code> afterwards</p></li></ol></div></section></section>
+<section><section id="_macro_rules"><h2>Macro Rules</h2><div class="ulist"><ul><li><p>Macro by example</p></li><li><p>Declarative macro</p></li><li><p>Way to avoid repetition</p></li></ul></div></section><section id="_example_usage"><h2>Example (usage)</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-n">op</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-o">+</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-bp">self</span><span class="tok-o">:</span><span class="tok-n">Point</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">other</span><span class="tok-o">:</span><span class="tok-n">Point</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-n">Point</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-n">x</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-n">x</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">other</span><span class="tok-p">.</span><span class="tok-n">x</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-n">y</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-n">y</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">other</span><span class="tok-p">.</span><span class="tok-n">y</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-p">});</span><span class="tok-w"></span></code></pre></div></div>
+<div class="paragraph"><p>will get converted to:</p></div>
+<div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-k">impl</span><span class="tok-w"> </span><span class="tok-n">Add</span><span class="tok-w"> </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-n">Point</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-k">type</span> <span class="tok-nc">Output</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Point</span><span class="tok-p">;</span><span class="tok-w"></span>
+
+<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">add</span><span class="tok-p">(</span><span class="tok-bp">self</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">other</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">Point</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-n">Self</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-n">Point</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">            </span><span class="tok-n">x</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-n">x</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">other</span><span class="tok-p">.</span><span class="tok-n">x</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-w">            </span><span class="tok-n">y</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-n">y</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">other</span><span class="tok-p">.</span><span class="tok-n">y</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-p">}</span><span class="tok-w"></span></code></pre></div></div></section><section id="_example_shortcut_for_operator_overloading"><h2>Example: shortcut for operator overloading</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-n">macro_rules</span><span class="tok-o">!</span><span class="tok-w"> </span><span class="tok-n">op</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">(</span><span class="tok-o">+</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-cp">$_self</span><span class="tok-o">:</span><span class="tok-n">ident</span><span class="tok-w"> </span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-cp">$typ1</span><span class="tok-o">:</span><span class="tok-n">ty</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-cp">$other</span><span class="tok-o">:</span><span class="tok-n">ident</span><span class="tok-w"> </span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-cp">$typ2</span><span class="tok-o">:</span><span class="tok-n">ty</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-cp">$block</span><span class="tok-o">:</span><span class="tok-n">block</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-k">impl</span><span class="tok-w"> </span><span class="tok-o">::</span><span class="tok-n">std</span><span class="tok-o">::</span><span class="tok-n">ops</span><span class="tok-o">::</span><span class="tok-n">Add</span><span class="tok-w"> </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-cp">$typ1</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">            </span><span class="tok-k">type</span> <span class="tok-nc">Output</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-cp">$typ1</span><span class="tok-p">;</span><span class="tok-w"></span>
+
+<span class="tok-w">            </span><span class="tok-k">fn</span> <span class="tok-nf">add</span><span class="tok-p">(</span><span class="tok-cp">$_self</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-cp">$other</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-cp">$typ2</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-n">Self</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">                </span><span class="tok-cp">$block</span><span class="tok-w"></span>
+<span class="tok-w">            </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">};</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-c1">// […]</span>
+<span class="tok-p">}</span><span class="tok-w"></span></code></pre></div></div></section><section id="_example_continued"><h2>Example (continued)</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-w">    </span><span class="tok-c1">// […]</span>
+<span class="tok-w">    </span><span class="tok-p">(</span><span class="tok-o">-</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-cp">$_self</span><span class="tok-o">:</span><span class="tok-n">ident</span><span class="tok-w"> </span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-cp">$typ1</span><span class="tok-o">:</span><span class="tok-n">ty</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-cp">$other</span><span class="tok-o">:</span><span class="tok-n">ident</span><span class="tok-w"> </span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-cp">$typ2</span><span class="tok-o">:</span><span class="tok-n">ty</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-cp">$block</span><span class="tok-o">:</span><span class="tok-n">block</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-k">impl</span><span class="tok-w"> </span><span class="tok-o">::</span><span class="tok-n">std</span><span class="tok-o">::</span><span class="tok-n">ops</span><span class="tok-o">::</span><span class="tok-n">Sub</span><span class="tok-w"> </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-cp">$typ1</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">            </span><span class="tok-k">type</span> <span class="tok-nc">Output</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-cp">$typ1</span><span class="tok-p">;</span><span class="tok-w"></span>
+
+<span class="tok-w">            </span><span class="tok-k">fn</span> <span class="tok-nf">sub</span><span class="tok-p">(</span><span class="tok-cp">$_self</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-cp">$other</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-cp">$typ2</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-n">Self</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">                </span><span class="tok-cp">$block</span><span class="tok-w"></span>
+<span class="tok-w">            </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">};</span><span class="tok-w"></span>
+<span class="tok-p">}</span><span class="tok-w"></span></code></pre></div></div></section><section id="_demo_shortcut_for_hashmap"><h2>Demo: Shortcut for HashMap</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-n">macro_rules</span><span class="tok-o">!</span><span class="tok-w"> </span><span class="tok-n">hash</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-c1">// TODO</span>
+<span class="tok-p">}</span><span class="tok-w"></span></code></pre></div></div></section><section id="_limitations_of_macros"><h2>Limitations of macros</h2><div class="ulist"><ul><li><p>Scope</p></li><li><p>Syntax</p></li></ul></div>
+<div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-n">op</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-bp">self</span><span class="tok-o">:</span><span class="tok-n">Point</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">other</span><span class="tok-o">:</span><span class="tok-n">Point</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-n">Point</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-n">x</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-n">x</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">other</span><span class="tok-p">.</span><span class="tok-n">x</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-n">y</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-n">y</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">other</span><span class="tok-p">.</span><span class="tok-n">y</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-p">});</span><span class="tok-w"></span></code></pre></div></div>
+<div class="listingblock"><div class="content"><pre class="pygments highlight"><code>error: `$typ1:ty` is followed by `+`, which is not allowed for
+`ty` fragments
+  --&gt; src/main.rs:51:30
+   |
+51 |     ($_self:ident : $typ1:ty + $other:ident : $typ2:ty,
+$block:block) =&gt; {
+   |                              ^</code></pre></div></div></section><section id="_macros_are_hygienic"><h2>Macros are hygienic</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-n">macro_rules</span><span class="tok-o">!</span><span class="tok-w"> </span><span class="tok-n">op</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">(</span><span class="tok-o">+</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-cp">$_self</span><span class="tok-o">:</span><span class="tok-n">ident</span><span class="tok-w"> </span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-cp">$typ</span><span class="tok-o">:</span><span class="tok-n">ty</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-cp">$block</span><span class="tok-o">:</span><span class="tok-n">block</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-k">impl</span><span class="tok-w"> </span><span class="tok-o">::</span><span class="tok-n">std</span><span class="tok-o">::</span><span class="tok-n">ops</span><span class="tok-o">::</span><span class="tok-n">Add</span><span class="tok-w"> </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-cp">$typ</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">            </span><span class="tok-k">type</span> <span class="tok-nc">Output</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-cp">$typ</span><span class="tok-p">;</span><span class="tok-w"></span>
+
+<span class="tok-w">            </span><span class="tok-k">fn</span> <span class="tok-nf">add</span><span class="tok-p">(</span><span class="tok-cp">$_self</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">other</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-cp">$typ</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-n">Self</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><b>(1)</b>
+<span class="tok-w">                </span><span class="tok-cp">$block</span><span class="tok-w"></span>
+<span class="tok-w">            </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">};</span><span class="tok-w"></span>
+<span class="tok-p">}</span><span class="tok-w"></span></code></pre></div></div>
+<div class="colist arabic"><ol><li><p>Usage of hard-coded <code>other</code> identifier.</p></li></ol></div></section><section id="_macros_are_hygienic_continued"><h2>Macros are hygienic (continued)</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-n">op</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-o">+</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-bp">self</span><span class="tok-o">:</span><span class="tok-n">Point</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-n">Point</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-n">x</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-n">x</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">other</span><span class="tok-p">.</span><span class="tok-n">x</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-n">y</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-n">y</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">other</span><span class="tok-p">.</span><span class="tok-n">y</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-p">});</span><span class="tok-w"></span></code></pre></div></div>
+<div class="listingblock"><div class="content"><pre class="pygments highlight"><code>error[E0425]: cannot find value `other` in this scope
+  --&gt; src/main.rs:73:21
+   |
+73 |         x: self.x + other.x,
+   |                     ^^^^^ not found in this scope
+
+error[E0425]: cannot find value `other` in this scope
+  --&gt; src/main.rs:74:21
+   |
+74 |         y: self.y + other.y,
+   |                     ^^^^^ not found in this scope</code></pre></div></div></section><section id="_debugging_macros_trace_macros"><h2>Debugging macros: trace macros</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-cp">#![feature(trace_macros)]</span><span class="tok-w"></span>
+<span class="tok-n">trace_macros</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-kc">true</span><span class="tok-p">);</span><span class="tok-w"></span></code></pre></div></div>
+<div class="listingblock"><div class="content"><pre class="pygments highlight"><code>note: trace_macro
+   --&gt; src/main.rs:185:1
+    |
+185 | / op!(+, self:Point, p2:Point, {
+186 | |     Point {
+187 | |         x: self.x + p2.x,
+188 | |         y: self.y + p2.y,
+189 | |     }
+190 | | });
+    | |___^
+    |
+    = note: expanding `op! { + , self : Point , p2 : Point , {
+            Point { x : self . x + p2 . x , y : self . y + p2 . y , } } }`
+    = note: to `impl $crate :: std :: ops :: Add for Point {
+            type Output = Point ; fn add ( self , p2 : Point ) -&gt; Self {
+            { Point{x: self.x + p2.x, y: self.y + p2.y,} } } }`</code></pre></div></div></section><section id="_debugging_macros_log_syntax"><h2>Debugging macros: log syntax</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-cp">#![feature(log_syntax)]</span><span class="tok-w"></span>
+
+<span class="tok-n">macro_rules</span><span class="tok-o">!</span><span class="tok-w"> </span><span class="tok-n">op</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">(</span><span class="tok-o">+</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-cp">$_self</span><span class="tok-o">:</span><span class="tok-n">ident</span><span class="tok-w"> </span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-cp">$typ1</span><span class="tok-o">:</span><span class="tok-n">ty</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-cp">$other</span><span class="tok-o">:</span><span class="tok-n">ident</span><span class="tok-w"> </span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-cp">$typ2</span><span class="tok-o">:</span><span class="tok-n">ty</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-cp">$block</span><span class="tok-o">:</span><span class="tok-n">block</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-n">log_syntax</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-cp">$typ1</span><span class="tok-p">);</span><span class="tok-w">               </span><b>(1)</b>
+
+<span class="tok-w">        </span><span class="tok-k">impl</span><span class="tok-w"> </span><span class="tok-cp">$crate</span><span class="tok-o">::</span><span class="tok-n">std</span><span class="tok-o">::</span><span class="tok-n">ops</span><span class="tok-o">::</span><span class="tok-n">Add</span><span class="tok-w"> </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-cp">$typ1</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">            </span><span class="tok-k">type</span> <span class="tok-nc">Output</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-cp">$typ1</span><span class="tok-p">;</span><span class="tok-w"></span>
+
+<span class="tok-w">            </span><span class="tok-k">fn</span> <span class="tok-nf">add</span><span class="tok-p">(</span><span class="tok-cp">$_self</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-cp">$other</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-cp">$typ2</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-n">Self</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">                </span><span class="tok-cp">$block</span><span class="tok-w"></span>
+<span class="tok-w">            </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">};</span><span class="tok-w"></span>
+<span class="tok-p">}</span><span class="tok-w"></span></code></pre></div></div>
+<div class="colist arabic"><ol><li><p>Will print <code>Point</code> at compile time</p></li></ol></div></section><section id="_macros_vs_generics"><h2>Macros vs Generics</h2><div class="ulist"><ul><li><p>Generics: the code is the same for different types</p></li><li><p>Macros: shortcut for a piece of code</p></li><li><p>Macros: manipulate the AST</p></li></ul></div></section><section id="_real_world_example_2"><h2>Real-world Example</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-cp">#[macro_export]</span><span class="tok-w"></span>
+<span class="tok-n">macro_rules</span><span class="tok-o">!</span><span class="tok-w"> </span><span class="tok-n">connect</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">(</span><span class="tok-cp">$widget</span><span class="tok-o">:</span><span class="tok-n">expr</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-cp">$event</span><span class="tok-o">:</span><span class="tok-n">ident</span><span class="tok-p">(</span><span class="tok-cp">$($args</span><span class="tok-o">:</span><span class="tok-n">pat</span><span class="tok-p">),</span><span class="tok-o">*</span><span class="tok-p">),</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-cp">$other_component</span><span class="tok-o">:</span><span class="tok-n">expr</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-cp">$msg</span><span class="tok-o">:</span><span class="tok-n">expr</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">stream</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-cp">$other_component</span><span class="tok-p">.</span><span class="tok-n">stream</span><span class="tok-p">().</span><span class="tok-n">clone</span><span class="tok-p">();</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-cp">$widget</span><span class="tok-p">.</span><span class="tok-cp">$event</span><span class="tok-p">(</span><span class="tok-k">move</span><span class="tok-w"> </span><span class="tok-o">|</span><span class="tok-cp">$($args</span><span class="tok-p">),</span><span class="tok-o">*|</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">            </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">msg</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nb">Option</span><span class="tok-o">&lt;</span><span class="tok-n">_</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"></span>
+<span class="tok-w">                </span><span class="tok-cp">$crate</span><span class="tok-o">::</span><span class="tok-n">IntoOption</span><span class="tok-o">::</span><span class="tok-n">into_option</span><span class="tok-p">(</span><span class="tok-cp">$msg</span><span class="tok-p">);</span><span class="tok-w"></span>
+<span class="tok-w">            </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nb">Some</span><span class="tok-p">(</span><span class="tok-n">msg</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">msg</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">                </span><span class="tok-n">stream</span><span class="tok-p">.</span><span class="tok-n">emit</span><span class="tok-p">(</span><span class="tok-n">msg</span><span class="tok-p">);</span><span class="tok-w"></span>
+<span class="tok-w">            </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-p">});</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">};</span><span class="tok-w"></span>
+
+<span class="tok-w">    </span><span class="tok-c1">// […]</span></code></pre></div></div></section><section id="_real_world_example_continued"><h2>Real-world Example (continued)</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-w">    </span><span class="tok-c1">// […]</span>
+<span class="tok-w">    </span><span class="tok-p">(</span><span class="tok-cp">$src_component</span><span class="tok-o">:</span><span class="tok-n">ident</span><span class="tok-w"> </span><span class="tok-o">@</span><span class="tok-w"> </span><span class="tok-cp">$message</span><span class="tok-o">:</span><span class="tok-n">pat</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-cp">$dst_component</span><span class="tok-o">:</span><span class="tok-n">expr</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-cp">$msg</span><span class="tok-o">:</span><span class="tok-n">expr</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">stream</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-cp">$dst_component</span><span class="tok-p">.</span><span class="tok-n">stream</span><span class="tok-p">().</span><span class="tok-n">clone</span><span class="tok-p">();</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-cp">$src_component</span><span class="tok-p">.</span><span class="tok-n">stream</span><span class="tok-p">().</span><span class="tok-n">observe</span><span class="tok-p">(</span><span class="tok-k">move</span><span class="tok-w"> </span><span class="tok-o">|</span><span class="tok-n">msg</span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">            </span><span class="tok-k">match</span><span class="tok-w"> </span><span class="tok-n">msg</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">                </span><span class="tok-o">&amp;</span><span class="tok-cp">$message</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w">  </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">                    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">msg</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nb">Option</span><span class="tok-o">&lt;</span><span class="tok-n">_</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"></span>
+<span class="tok-w">                        </span><span class="tok-cp">$crate</span><span class="tok-o">::</span><span class="tok-n">IntoOption</span><span class="tok-o">::</span><span class="tok-n">into_option</span><span class="tok-p">(</span><span class="tok-cp">$msg</span><span class="tok-p">);</span><span class="tok-w"></span>
+<span class="tok-w">                    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nb">Some</span><span class="tok-p">(</span><span class="tok-n">msg</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">msg</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-n">stream</span><span class="tok-p">.</span><span class="tok-n">emit</span><span class="tok-p">(</span><span class="tok-n">msg</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-w">                </span><span class="tok-p">},</span><span class="tok-w"></span>
+<span class="tok-w">                </span><span class="tok-n">_</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"> </span><span class="tok-p">(),</span><span class="tok-w"></span>
+<span class="tok-w">            </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-p">});</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">};</span><span class="tok-w"></span>
+<span class="tok-p">}</span><span class="tok-w"></span></code></pre></div></div></section><section id="_real_world_example_usage"><h2>Real-world Example (usage)</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-n">connect</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-n">relm</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">plus_button</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">connect_clicked</span><span class="tok-p">(</span><span class="tok-n">_</span><span class="tok-p">),</span><span class="tok-w"> </span><span class="tok-n">Msg</span><span class="tok-o">::</span><span class="tok-n">Increment</span><span class="tok-p">);</span><span class="tok-w"></span>
+
+<span class="tok-n">connect</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-n">text</span><span class="tok-o">@</span><span class="tok-n">Change</span><span class="tok-p">(</span><span class="tok-k">ref</span><span class="tok-w"> </span><span class="tok-n">text</span><span class="tok-p">),</span><span class="tok-w"> </span><span class="tok-n">relm</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">TextChange</span><span class="tok-p">(</span><span class="tok-n">text</span><span class="tok-p">.</span><span class="tok-n">clone</span><span class="tok-p">()));</span><span class="tok-w"></span></code></pre></div></div></section></section>
+<section><section id="_custom_derive"><h2>Custom Derive</h2><div class="ulist"><ul><li><p>Procedural macro</p></li><li><p>Allow to write your own <code>#[derive(Thing)]</code></p></li><li><p>Generate code at compile time</p></li></ul></div></section><section id="_example_generate_getters_and_setters_for_a_struct"><h2>Example: Generate getters and setters for a struct</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-cp">#[macro_use]</span><span class="tok-w"></span>
+<span class="tok-k">extern</span><span class="tok-w"> </span><span class="tok-k">crate</span><span class="tok-w"> </span><span class="tok-n">getter_setter</span><span class="tok-p">;</span><span class="tok-w"></span>
+
+<span class="tok-cp">#[derive(GetterSetter)]</span><span class="tok-w"></span>
+<span class="tok-k">struct</span> <span class="tok-nc">Point</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-n">x</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">i32</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-n">y</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">i32</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-p">}</span><span class="tok-w"></span></code></pre></div></div>
+<div class="paragraph"><p>will generate:</p></div>
+<div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-k">impl</span><span class="tok-w"> </span><span class="tok-n">Point</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">get_x</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-bp">self</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-kt">i32</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-n">x</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"></span>
+
+<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">get_y</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-bp">self</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-kt">i32</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-n">y</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"></span>
+
+<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">set_x</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-bp">self</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">value</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">i32</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-n">x</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">value</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"></span>
+
+<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">set_y</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-bp">self</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">value</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">i32</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-n">y</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">value</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-p">}</span><span class="tok-w"></span></code></pre></div></div></section><section id="_attempt_with_code_macro_rules_code"><h2>Attempt with <code>macro_rules!</code>:</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-n">getter_setter</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-k">struct</span> <span class="tok-nc">P</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-n">x</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">i32</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-n">y</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">i32</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-p">});</span><span class="tok-w"></span></code></pre></div></div>
+<div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-n">macro_rules</span><span class="tok-o">!</span><span class="tok-w"> </span><span class="tok-n">getter_setter</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">(</span><span class="tok-k">struct</span> <span class="tok-cp">$struct_name</span><span class="tok-o">:</span><span class="tok-n">ident</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-cp">$(</span><span class="tok-w"> </span><span class="tok-cp">$field_name</span><span class="tok-o">:</span><span class="tok-n">ident</span><span class="tok-w"> </span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-cp">$field_type</span><span class="tok-o">:</span><span class="tok-n">ty</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">)</span><span class="tok-o">*</span><span class="tok-w"> </span><span class="tok-p">})</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-k">struct</span> <span class="tok-cp">$struct_name</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">            </span><span class="tok-cp">$($field_name</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-cp">$field_type</span><span class="tok-p">,)</span><span class="tok-o">*</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"></span>
+
+<span class="tok-w">        </span><span class="tok-k">impl</span><span class="tok-w"> </span><span class="tok-cp">$struct_name</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">            </span><span class="tok-cp">$(</span><span class="tok-k">fn</span> <span class="tok-nf">concat_idents</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-n">get_</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-cp">$field_name</span><span class="tok-p">)(</span><span class="tok-o">&amp;</span><span class="tok-bp">self</span><span class="tok-p">)</span><span class="tok-w"></span>
+<span class="tok-w">                </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-cp">$field_type</span><span class="tok-w"></span>
+<span class="tok-w">            </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">                </span><span class="tok-o">&amp;</span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-cp">$field_name</span><span class="tok-w"></span>
+<span class="tok-w">            </span><span class="tok-p">})</span><span class="tok-o">*</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">};</span><span class="tok-w"></span>
+<span class="tok-p">}</span><span class="tok-w"></span></code></pre></div></div></section><section id="_implementation"><h2>Implementation</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-cp">#[proc_macro_derive(GetterSetter)]</span><span class="tok-w"></span>
+<span class="tok-k">pub</span><span class="tok-w"> </span><span class="tok-k">fn</span> <span class="tok-nf">getter_setter</span><span class="tok-p">(</span><span class="tok-n">input</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">TokenStream</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-n">TokenStream</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">string</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">input</span><span class="tok-p">.</span><span class="tok-n">to_string</span><span class="tok-p">();</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">ast</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">syn</span><span class="tok-o">::</span><span class="tok-n">parse_derive_input</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-n">string</span><span class="tok-p">)</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-n">expect</span><span class="tok-p">(</span><span class="tok-s">&quot;cannot parse input string&quot;</span><span class="tok-p">);</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">gen</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">impl_getter_setter</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-n">ast</span><span class="tok-p">);</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-n">gen</span><span class="tok-p">.</span><span class="tok-n">parse</span><span class="tok-p">()</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-n">expect</span><span class="tok-p">(</span><span class="tok-s">&quot;cannot parse generated code&quot;</span><span class="tok-p">)</span><span class="tok-w"></span>
+<span class="tok-p">}</span><span class="tok-w"></span></code></pre></div></div></section><section id="_implementation_continued"><h2>Implementation (continued)</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-k">fn</span> <span class="tok-nf">impl_getter_setter</span><span class="tok-p">(</span><span class="tok-n">ast</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-n">MacroInput</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-n">Tokens</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">name</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-n">ast</span><span class="tok-p">.</span><span class="tok-n">ident</span><span class="tok-p">;</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-n">methods</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">vec</span><span class="tok-o">!</span><span class="tok-p">[];</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">Struct</span><span class="tok-p">(</span><span class="tok-n">VariantData</span><span class="tok-o">::</span><span class="tok-n">Struct</span><span class="tok-p">(</span><span class="tok-k">ref</span><span class="tok-w"> </span><span class="tok-n">fields</span><span class="tok-p">))</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">ast</span><span class="tok-p">.</span><span class="tok-n">body</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-n">field</span><span class="tok-w"> </span><span class="tok-k">in</span><span class="tok-w"> </span><span class="tok-n">fields</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">            </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">name</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">field</span><span class="tok-p">.</span><span class="tok-n">ident</span><span class="tok-p">.</span><span class="tok-n">as_ref</span><span class="tok-p">()</span><span class="tok-w"></span>
+<span class="tok-w">                </span><span class="tok-p">.</span><span class="tok-n">expect</span><span class="tok-p">(</span><span class="tok-s">&quot;field should have a name&quot;</span><span class="tok-p">);</span><span class="tok-w"></span>
+<span class="tok-w">            </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">ty</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-n">field</span><span class="tok-p">.</span><span class="tok-n">ty</span><span class="tok-p">;</span><span class="tok-w"></span>
+
+<span class="tok-w">            </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">getter_name</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Ident</span><span class="tok-o">::</span><span class="tok-n">new</span><span class="tok-p">(</span><span class="tok-n">format</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;get_{}&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">name</span><span class="tok-p">));</span><span class="tok-w"></span>
+<span class="tok-w">            </span><span class="tok-n">methods</span><span class="tok-p">.</span><span class="tok-n">push</span><span class="tok-p">(</span><span class="tok-n">quote</span><span class="tok-o">!</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">                </span><span class="tok-k">pub</span><span class="tok-w"> </span><span class="tok-k">fn</span> <span class="tok-err">#</span><span class="tok-n">getter_name</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-bp">self</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-err">#</span><span class="tok-n">ty</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">                    </span><span class="tok-o">&amp;</span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-err">#</span><span class="tok-n">name</span><span class="tok-w"></span>
+<span class="tok-w">                </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-w">            </span><span class="tok-p">});</span><span class="tok-w"></span>
+<span class="tok-w">            </span><span class="tok-c1">// […]</span></code></pre></div></div></section><section id="_implementation_continued_2"><h2>Implementation (continued)</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-w">            </span><span class="tok-c1">// […]</span>
+<span class="tok-w">            </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">setter_name</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Ident</span><span class="tok-o">::</span><span class="tok-n">new</span><span class="tok-p">(</span><span class="tok-n">format</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;set_{}&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">name</span><span class="tok-p">));</span><span class="tok-w"></span>
+<span class="tok-w">            </span><span class="tok-n">methods</span><span class="tok-p">.</span><span class="tok-n">push</span><span class="tok-p">(</span><span class="tok-n">quote</span><span class="tok-o">!</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">                </span><span class="tok-k">pub</span><span class="tok-w"> </span><span class="tok-k">fn</span> <span class="tok-err">#</span><span class="tok-n">setter_name</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-bp">self</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">value</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-err">#</span><span class="tok-n">ty</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">                    </span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-err">#</span><span class="tok-n">name</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">value</span><span class="tok-p">;</span><span class="tok-w"></span>
+<span class="tok-w">                </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-w">            </span><span class="tok-p">});</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-n">quote</span><span class="tok-o">!</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-k">impl</span><span class="tok-w"> </span><span class="tok-err">#</span><span class="tok-n">name</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">            </span><span class="tok-err">#</span><span class="tok-p">(</span><span class="tok-err">#</span><span class="tok-n">methods</span><span class="tok-p">)</span><span class="tok-o">*</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-p">}</span><span class="tok-w"></span></code></pre></div></div></section><section id="_tip_1_never_use_code_unwrap_code_in_procedural_macro"><h2>Tip #1: Never use <code>unwrap()</code> in procedural macro</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code>error: proc-macro derive panicked
+ --&gt; src/main.rs:4:10
+  |
+4 | #[derive(GetterSetter)]
+  |          ^^^^^^^^^^^^
+  |
+  = help: message: called `Option::unwrap()` on a `None` value</code></pre></div></div></section><section id="_tip_2_use_code_code_to_inspect_the_ast"><h2>Tip 2: Use <code>{:#?}</code> to inspect the AST</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-n">println</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;{:#?}&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">ast</span><span class="tok-p">);</span><span class="tok-w"></span></code></pre></div></div>
+<div class="listingblock"><div class="content"><pre class="pygments highlight"><code>DeriveInput {
+    ident: Ident(
+        "Point"
+    ),
+    vis: Inherited,
+    attrs: [],
+    generics: Generics {
+        lifetimes: [],
+        ty_params: [],
+        where_clause: WhereClause {
+            predicates: []
+        }
+    },
+    body: Struct(
+        Struct(
+            [
+                Field {
+                    ident: Some(
+                        Ident(
+                            "x"
+                        )
+                    ),
+                    vis: Inherited,
+                    attrs: [],
+                    ty: Path(
+                        None,
+                        Path {
+                            global: false,
+                            segments: [
+                                PathSegment {
+                                    ident: Ident(
+                                        "i32"
+                                    ),
+                                    parameters: AngleBracketed(
+                                        AngleBracketedParameterData {
+                                            lifetimes: [],
+                                            types: [],
+                                            bindings: []
+                                        }
+                                    )
+                                }
+                            ]
+                        }
+                    )
+                },
+                Field {
+                    ident: Some(
+                        Ident(
+                            "y"
+                        )
+                    ),
+                    vis: Inherited,
+                    attrs: [],
+                    ty: Path(
+                        None,
+                        Path {
+                            global: false,
+                            segments: [
+                                PathSegment {
+                                    ident: Ident(
+                                        "i32"
+                                    ),
+                                    parameters: AngleBracketed(
+                                        AngleBracketedParameterData {
+                                            lifetimes: [],
+                                            types: [],
+                                            bindings: []
+                                        }
+                                    )
+                                }
+                            ]
+                        }
+                    )
+                }
+            ]
+        )
+    )
+}</code></pre></div></div></section><section id="_real_world_example_3"><h2>Real-world Example</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-cp">#[derive(Commands)]</span><span class="tok-w"></span>
+<span class="tok-k">pub</span><span class="tok-w"> </span><span class="tok-k">enum</span> <span class="tok-nc">AppCommand</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-cp">#[completion(hidden)]</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-n">ActivateSelection</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-cp">#[help(text=</span><span class="tok-s">&quot;Go back in the history&quot;</span><span class="tok-cp">)]</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-n">Back</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-c1">// […]</span>
+<span class="tok-w">    </span><span class="tok-cp">#[help(text=</span><span class="tok-s">&quot;Open an URL&quot;</span><span class="tok-cp">)]</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-n">Open</span><span class="tok-p">(</span><span class="tok-nb">String</span><span class="tok-p">),</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-c1">// […]</span>
+<span class="tok-p">}</span><span class="tok-w"></span></code></pre></div></div></section></section>
+<section id="_quiz"><h2>Quiz</h2><div class="olist arabic"><ol class="arabic"><li><p>How would you simulate function-like procedural macro on stable Rust?</p></li></ol></div>
+<div class="paragraph"><p>i.e. something like:</p></div>
+<div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-n">println</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;{} &lt; {}&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">42</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">num</span><span class="tok-p">);</span><span class="tok-w"></span></code></pre></div></div></section>
+<section><section id="_surprise"><h2>Surprise!</h2></section><section id="_declarative_macro_2_0"><h2>Declarative Macro 2.0</h2><div class="ulist"><ul><li><p>Better hygiene</p></li><li><p>Better scoping</p></li></ul></div></section><section id="_example_3"><h2>Example</h2><div class="listingblock"><div class="content"><pre class="pygments highlight"><code class="rust language-rust"><span class="tok-k">mod</span> <span class="tok-nn">collections</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-k">pub</span><span class="tok-w"> </span><span class="tok-kr">macro</span><span class="tok-w"> </span><span class="tok-n">hash</span><span class="tok-p">(</span><span class="tok-cp">$(</span><span class="tok-w"> </span><span class="tok-cp">$key</span><span class="tok-o">:</span><span class="tok-n">expr</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"> </span><span class="tok-cp">$value</span><span class="tok-o">:</span><span class="tok-n">expr</span><span class="tok-w"> </span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">)</span><span class="tok-o">*</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{{</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-n">hashmap</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-o">::</span><span class="tok-n">std</span><span class="tok-o">::</span><span class="tok-n">collections</span><span class="tok-o">::</span><span class="tok-n">HashMap</span><span class="tok-o">::</span><span class="tok-n">new</span><span class="tok-p">();</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-cp">$(</span><span class="tok-n">hashmap</span><span class="tok-p">.</span><span class="tok-n">insert</span><span class="tok-p">(</span><span class="tok-cp">$key</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-cp">$value</span><span class="tok-p">);)</span><span class="tok-o">*</span><span class="tok-w"></span>
+<span class="tok-w">        </span><span class="tok-n">hashmap</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-p">}}</span><span class="tok-w"></span>
+<span class="tok-p">}</span><span class="tok-w"></span>
+
+<span class="tok-k">use</span><span class="tok-w"> </span><span class="tok-n">collections</span><span class="tok-o">::</span><span class="tok-n">hash</span><span class="tok-p">;</span><span class="tok-w"></span>
+
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">hashmap</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">hash</span><span class="tok-o">!</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-s">&quot;one&quot;</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-s">&quot;two&quot;</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"> </span><span class="tok-mi">2</span><span class="tok-p">,</span><span class="tok-w"></span>
+<span class="tok-p">};</span><span class="tok-w"></span></code></pre></div></div></section></section>
+<section id="_questions"><h2>Questions?</h2></section></div></div><script src="reveal.js/lib/js/head.min.js"></script><script src="reveal.js/js/reveal.js"></script><script>// See https://github.com/hakimel/reveal.js#configuration for a full list of configuration options
+Reveal.initialize({
+  // Display controls in the bottom right corner
+  controls: true,
+  // Display a presentation progress bar
+  progress: true,
+  // Display the page number of the current slide
+  slideNumber: false,
+  // Push each slide change to the browser history
+  history: false,
+  // Enable keyboard shortcuts for navigation
+  keyboard: true,
+  // Enable the slide overview mode
+  overview: true,
+  // Vertical centering of slides
+  center: true,
+  // Enables touch navigation on devices with touch input
+  touch: true,
+  // Loop the presentation
+  loop: false,
+  // Change the presentation direction to be RTL
+  rtl: false,
+  // Turns fragments on and off globally
+  fragments: true,
+  // Flags if the presentation is running in an embedded mode,
+  // i.e. contained within a limited portion of the screen
+  embedded: false,
+  // Number of milliseconds between automatically proceeding to the
+  // next slide, disabled when set to 0, this value can be overwritten
+  // by using a data-autoslide attribute on your slides
+  autoSlide: 0,
+  // Stop auto-sliding after user input
+  autoSlideStoppable: true,
+  // Enable slide navigation via mouse wheel
+  mouseWheel: false,
+  // Hides the address bar on mobile devices
+  hideAddressBar: true,
+  // Opens links in an iframe preview overlay
+  previewLinks: false,
+  // Theme (e.g., beige, black, league, night, serif, simple, sky, solarized, white)
+  // NOTE setting the theme in the config no longer works in reveal.js 3.x
+  //theme: Reveal.getQueryHash().theme || 'black',
+  // Transition style (e.g., none, fade, slide, convex, concave, zoom)
+  transition: Reveal.getQueryHash().transition || 'slide',
+  // Transition speed (e.g., default, fast, slow)
+  transitionSpeed: 'default',
+  // Transition style for full page slide backgrounds (e.g., none, fade, slide, convex, concave, zoom)
+  backgroundTransition: 'fade',
+  // Number of slides away from the current that are visible
+  viewDistance: 3,
+  // Parallax background image (e.g., "'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg'")
+  parallaxBackgroundImage: '',
+  // Parallax background size in CSS syntax (e.g., "2100px 900px")
+  parallaxBackgroundSize: '',
+
+  // The "normal" size of the presentation, aspect ratio will be preserved
+  // when the presentation is scaled to fit different resolutions. Can be
+  // specified using percentage units.
+  width: 960,
+  height: 700,
+
+  // Factor of the display size that should remain empty around the content
+  margin: 0.1,
+
+  // Bounds for smallest/largest possible scale to apply to content
+  minScale: 0.2,
+  maxScale: 1.5,
+
+  // Optional libraries used to extend on reveal.js
+  dependencies: [
+      { src: 'reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      { src: 'reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: 'reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      
+      { src: 'reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      { src: 'reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+  ]
+});</script></body></html>
