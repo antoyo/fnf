@@ -7,7 +7,7 @@
 
 === Example
 
-// The sum_string function returns the sum of two strings, as a number.
+// NOTE: The sum_string function returns the sum of two strings, as a number.
 // You know, this trick you can do in languages like JavaScript.
 
 [source, rust]
@@ -28,7 +28,7 @@ fn sum_string(str1: &str, str2: &str) -> Result<i32, ParseIntError> {
 
 === Function as a parameter
 
-// We name the function fmap instead of map because we made the same mistake as Haskell.
+// NOTE: We name the function fmap instead of map because we made the same mistake as Haskell.
 [source, rust]
 ----
 trait Functor {

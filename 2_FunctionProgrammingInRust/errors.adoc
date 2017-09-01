@@ -12,6 +12,14 @@
  * Cannot access the value directly
  * Like the `Maybe` type in Haskell
 
+[source, rust]
+----
+enum Option<T> {
+    Some(T),
+    None,
+}
+----
+
 === Example
 
 [source, rust]
@@ -43,7 +51,7 @@ optional.cloned()
 
 === Result
 
-// The #[must_use] attribute means that we must use the result, which is a good idea since we want to manage errors.
+// NOTE: The #[must_use] attribute means that we must use the result, which is a good idea since we want to manage errors.
 // So, it triggers a warning if we don't use it.
 // Since it's only a warning, we can ignore it. Who cares about errors anyway?
 
@@ -51,6 +59,14 @@ optional.cloned()
  * `#[must_use]`
  * Like the `Either` type in Haskell
  * Methods similar to `Option`
+
+[source, rust]
+----
+enum Result<T, E> {
+    Ok(T),
+    Err(E),
+}
+----
 
 === Example
 
