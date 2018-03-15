@@ -63,7 +63,7 @@ gcc main.c -o program -g -fsanitize=address
 
 # For Rust:
 
-export RUSTFLAGS="-Z sanitizer=address
+export RUSTFLAGS="-Z sanitizer=address"
 cargo run
 ----
 
