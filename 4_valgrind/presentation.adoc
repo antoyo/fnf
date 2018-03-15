@@ -60,4 +60,9 @@ valgrind ./program
 
 gcc main.c -o program -g -fsanitize=address
 ./program
+
+# For Rust:
+
+export RUSTFLAGS="-Z sanitizer=address
+cargo run
 ----
