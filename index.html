@@ -85,7 +85,12 @@ document.getElementsByTagName( 'head' )[0].appendChild( link );</script><!--[if 
 <span class="tok-c1"># OR</span>
 
 gcc main.c -o program -g -fsanitize<span class="tok-o">=</span>address
-./program</code></pre></div></div></section></div></div><script src="reveal.js/lib/js/head.min.js"></script><script src="reveal.js/js/reveal.js"></script><script>// See https://github.com/hakimel/reveal.js#configuration for a full list of configuration options
+./program
+
+<span class="tok-c1"># For Rust:</span>
+
+<span class="tok-nb">export</span> <span class="tok-nv">RUSTFLAGS</span><span class="tok-o">=</span><span class="tok-s2">&quot;-Z sanitizer=address</span>
+<span class="tok-s2">cargo run</span></code></pre></div></div></section></div></div><script src="reveal.js/lib/js/head.min.js"></script><script src="reveal.js/js/reveal.js"></script><script>// See https://github.com/hakimel/reveal.js#configuration for a full list of configuration options
 Reveal.initialize({
   // Display controls in the bottom right corner
   controls: true,
