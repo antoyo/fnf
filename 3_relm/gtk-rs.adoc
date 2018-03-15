@@ -1,0 +1,121 @@
+== gtk-rs
+
+=== Safety
+
+ * Signal ID, Event names, Event handlers (lifetime)
+ * "Inheritance"
+ * Automatic ref-counting
+ * `Sync` and `Send`
+ * String encoding
+ * Type system
+ * Nullability
+ * Async functions
+ * Boolean and integers
+
+=== Remainder: closures
+
+ * Function without a name.
+ * Can have an environment.
+
+=== Example of closures
+
+[source,rust]
+----
+let num = 10;
+let vec: Vec<_> = (1..100).collect();     // <1>
+let iter = vec.into_iter()                // <2>
+    .filter(|&x| x > num && x % 2 == 0)   // <3>
+    .map(|x| x * x);
+for x in iter {                           // <4>
+    println!("{}", x);
+}
+----
+<1> Create a vector with the elements from [1, 100[.
+<2> Create an iterator into the vector.
+<3> Filter the elements from the iterator using a closure which captures the variable `num`
+<4> Iterate over an iterator with a`for` loop.
+
+=== Example
+
+[source,rust]
+----
+use gtk::{Button, Window, WindowType};
+
+fn main() {
+    if gtk::init().is_err() {
+        println!("Failed to initialize GTK.");
+        return;
+    }
+
+    let window = Window::new(WindowType::Toplevel);
+    window.set_title("First GTK+ Program");
+    window.set_default_size(350, 70);
+    let button = Button::new_with_label("Click me!");
+    window.add(&button);
+    window.show_all();
+
+    // …
+----
+
+=== Example (continued)
+
+[source,rust]
+----
+    window.connect_delete_event(|_, _| {
+        gtk::main_quit();
+        Inhibit(false)
+    });
+
+    button.connect_clicked(|_| {
+        println!("Clicked!");
+    });
+
+    gtk::main();
+}
+----
+
+=== Convenience
+
+ * Use of closures for the event handlers.
+ * Method syntax.
+ * Usage of trait to simulate inheritance (no need for macro).
+
+[source,rust]
+----
+use gtk::{Button, ButtonExt};
+
+let button = Button::new_with_label("Click me!");
+button.connect_clicked(|but| {
+    but.set_label("I've been clicked!");
+});
+----
+
+=== Remainder: traits
+
+ * A set of methods and types that can be defined for a type
+ * Useful for generic functions
+ * Similar to interfaces in OO languages
+
+=== Example of traits
+
+[source,rust]
+----
+trait Read {
+    fn read(string: &str) -> Self;   // <1>
+}
+
+impl Read for i32 {
+    fn read(string: &str) -> Self {
+        string.parse().unwrap()
+    }
+}
+
+fn print_read<R: Display + Read>() { // <2>
+    let value: R = Read::read("42");
+    println!("Read: {}", value);
+}
+
+print_read::<i32>();
+----
+<1> Types implementing `Read` must implement this method.
+<2> The type `R` must implement `Display` and `Read`.

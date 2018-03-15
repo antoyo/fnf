@@ -1,0 +1,14 @@
+= Introduction to gtk-rs and relm
+:source-highlighter: pygments
+:pygments-style: monokai
+:imagesdir: ./images
+
+include::introduction.adoc[]
+
+include::gtk.adoc[]
+
+include::gtk-rs.adoc[]
+
+include::Fosdem2018/presentation.adoc[]
+
+include::conclusion.adoc[]

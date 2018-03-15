@@ -1,0 +1,68 @@
+== GTK+
+
+ * Free and portable GUI toolkit.
+ * Set of libraries used to developed graphical applications.
+// You know, this thing we used to do before the Era of Electron.
+ * Object-oriented.
+ * Many bindings to be able to use it from other languages.
+ * Used by GIMP and GNOME.
+
+=== Libraries
+
+ * GLib
+ * Pango
+ * Cairo
+ * GtkBuilder (formerly Glade)
+ * ATK
+ * …
+
+=== Widgets
+
+ * Buttons
+ * Check boxes
+ * Windows
+ * Menu
+ * Toolbars
+ * Status bars
+ * Tabs
+ * Labels
+ * …
+
+=== Widgets
+
+image::widgets.png[]
+
+=== Event handling
+
+ * Execute code (the callback) when there's an action.
+ * Transfer data to the callback.
+ * Some callbacks receive additional parameters and return a value.
+
+[source,c]
+----
+#include <gtk/gtk.h>
+
+void callback_clicked(GtkWidget *widget, gpointer data) {
+    gtk_button_set_label(GTK_BUTTON(widget), "Clicked");
+}
+
+GtkWidget *button = gtk_button_new_with_label("Click me!");
+g_signal_connect(button, "clicked", G_CALLBACK(callback_clicked),
+    NULL);
+----
+
+=== Layouts
+
+ * Organize widgets.
+ * Examples:
+ ** Alignment
+ ** Notebook
+ ** Scrolling window
+ ** Box
+ ** Grid
+ ** Fixed
+ ** …
+
+=== Layouts
+
+image::layouts.png[]
