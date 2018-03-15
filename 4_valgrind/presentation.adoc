@@ -66,3 +66,6 @@ gcc main.c -o program -g -fsanitize=address
 export RUSTFLAGS="-Z sanitizer=address
 cargo run
 ----
+
+Find the exercises here: +
+https://github.com/antoyo/fnf/tree/master/4_valgrind/examples
