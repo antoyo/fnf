@@ -1,5 +1,7 @@
 == Error Handling
 
+// NOTE: in this chapter I'll present you error-chain.
+
  * Option
  * Result
  * Macros

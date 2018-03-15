@@ -12,11 +12,12 @@
 
 [source, rust]
 ----
-let inc_opt = optional.map(|num| num + 1);         // <1>
+// TODO: move annotations to the right.
+let inc_opt = optional.map(|num| num + 1);                                // <1>
 
 fn sum_string(str1: &str, str2: &str) -> Result<i32, ParseIntError> {
     str1.parse()
-        .and_then(|num1: i32| -> Result<i32, _> { // <2> <3>
+        .and_then(|num1: i32| -> Result<i32, _> {                         // <2> <3>
             let num2: i32 = str2.parse()?;
             Ok(num1 + num2)
         })
@@ -36,6 +37,8 @@ trait Functor {
     where F: Fn(&Self) -> O;                              // <1>
 }
 
+// TODO: show the implementation for numbers.
+
 let two = 2;
 println!("{:?}", 40.fmap(|num| (num + two).to_string())); // <2>
 ----
@@ -46,6 +49,7 @@ println!("{:?}", 40.fmap(|num| (num + two).to_string())); // <2>
 
 [source, rust]
 ----
+// TODO: maybe use impl trait to remove lifetimes?
 fn compose<A, B, C, F, G>(f: F, g: G) -> Box<Fn(A) -> C> // <1>
 where F: Fn(A) -> B + 'static,
       G: Fn(B) -> C + 'static,
