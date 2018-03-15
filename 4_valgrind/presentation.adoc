@@ -1,0 +1,63 @@
+= How to debug a segfault?
+:source-highlighter: pygments
+:pygments-style: monokai
+
+== Compile with debug symbols
+
+Compile with `-g`:
+
+[source,bash]
+----
+gcc main.c -o main -g // <1>
+----
+<1> Don't forget `-g` to have debug symbols.
+
+== Valgrind
+
+ * Memcheck (memory management checker)
+ * Cachegrind (cache profiler)
+ * Callgrind (cachegrind + callgraphs)
+ * Massif (heap profiler)
+ * Helgrind (thread debugger to find data races)
+ * DRD (check multithreaded programs)
+ * …
+
+== Clang sanitizers
+
+ * Address sanitizer (`-fsanitize=address`)
+ * Memory sanitizer (`-fsanitize=memory`)
+ * Undefined behavior sanitizer (`-fsanitize=undefined`)
+
+ * Leak sanitizer (`-fsanitize=leak`)
+ * Thread sanitizer (`-fsanitize=thread`)
+
+Source: http://clang.llvm.org/docs/
+
+=== Good to know
+
+As the doc says:
+
+[quote]
+____
+Typical slowdown introduced by MemorySanitizer is 3x.
+____
+
+So do not run program in production with these flags.
+
+Don't run a program compiled with clang sanitizers in valgrind.
+
+== Fun Fact
+
+Rust is mentioned four times in the Wikipedia page about Segmentation fault.
+
+== Summary
+
+[source,bash]
+----
+valgrind ./program
+
+# OR
+
+gcc main.c -o program -g -fsanitize=address
+./program
+----
