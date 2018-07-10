@@ -1,0 +1,8 @@
+= Web Security
+
+== Practice
+
+ * https://www.securite-info.org/
+ * https://www.root-me.org/
+ * https://www.hackthissite.org/
+ * http://overthewire.org/wargames/natas/

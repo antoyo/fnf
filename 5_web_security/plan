@@ -1,0 +1,15 @@
+XSS
+ * combo != trust
+ * steal session: secure cookies
+
+CSRF
+
+SQL injection
+ * turn off errors/debug mode
+ * blindfold sql injection
+
+CRLF
+ * CRLF input -> textarea
+
+All
+ * robots.txt
