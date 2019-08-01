@@ -1,0 +1,10 @@
+Gemfile.lock
+
+examples/*
+!/**/
+!examples/*.*
+
+*.o
+.bundle
+reveal.js
+*.html
