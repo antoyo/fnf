@@ -1,0 +1,8 @@
+.line {
+    display: block;
+    min-height: 27px;
+}
+
+.line.focus {
+    background: #657b83;
+}

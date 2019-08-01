@@ -1,6 +1,6 @@
 == Subroutines
 
-[source,asm]
+[source,x86asm]
 ----
 main:
     push rbp          ; <1>
@@ -21,7 +21,7 @@ main:
 
 === Attempt #1: saving the instruction pointer
 
-[source,asm]
+[source,x86asm]
 ----
 mov rdi, 10
 mov rsi, 1
@@ -31,7 +31,7 @@ jmp add_without_ret
 
 === Attempt #2: saving the instruction pointer + an offset
 
-[source,asm]
+[source,x86asm]
 ----
 mov rdi, 10
 mov rsi, 1
@@ -43,24 +43,28 @@ jmp add_without_ret
 === Attempt #3: saving an address
 
 // TODO: adjust the lines.
-[source,asm]
+[source,x86asm]
 ----
 include::examples/4_subroutine.asm[lines=97..101]
 ----
 
 === Attempt #3: does it always work?
 
-[source,asm]
+[source,x86asm]
 ----
 include::examples/4_subroutine.asm[lines=150..153]
 ----
 
 === Attempt #3: factorial example
 
-[source,asm,highlight='10']
+[source,x86asm,highlight='10']
 ----
 include::examples/4_subroutine.asm[lines=53..75]
 ----
+
+++++
+<p class="fragment" data-code-focus="10"></p>
+++++
 
 === Attempt #3: failed
 
@@ -71,13 +75,13 @@ terminated by signal SIGBUS (Misaligned address error)
 
 === Solution
 
-[source,asm]
+[source,x86asm]
 ----
 include::examples/4_subroutine.asm[lines=107..111]
 ----
 <1> `call` does the same: push the return address on the stack and jump to the label
 
-[source,asm]
+[source,x86asm]
 ----
 include::examples/4_subroutine.asm[lines=22..26]
 ----
@@ -87,7 +91,7 @@ include::examples/4_subroutine.asm[lines=22..26]
 
 === Attempt #1: reserve space in the code
 
-[source,asm]
+[source,x86asm]
 ----
     jmp call_add
 param1: dq 40
@@ -98,26 +102,26 @@ call_add:
 
 === Attempt #2: reserve space in the data section
 
-[source,asm]
+[source,x86asm]
 ----
 include::examples/4_subroutine.asm[lines=137..147]
 ----
 
 === Attempt #2: calling with static parameters
 
-[source,asm]
+[source,x86asm]
 ----
 include::examples/4_subroutine.asm[lines=126..128]
 ----
 
 === Attempt #3: passing parameters in registers
 
-[source,asm]
+[source,x86asm]
 ----
 include::examples/4_subroutine.asm[lines=12..15]
 ----
 
-[source,asm]
+[source,x86asm]
 ----
 include::examples/4_subroutine.asm[lines=81..83]
 ----
@@ -146,7 +150,7 @@ image::images/data_layout.png[Data Layout]
 
 === How to do stack allocation?
 
-[source,asm]
+[source,x86asm]
 ----
 include::examples/4_subroutine.asm[lines=156..159]
 ----
@@ -158,7 +162,7 @@ image::images/stackframe1.png[Stack Frame]
 
 === Initialize an array
 
-[source,asm]
+[source,x86asm]
 ----
 include::examples/4_subroutine.asm[lines=161..172]
 ----
@@ -166,21 +170,21 @@ include::examples/4_subroutine.asm[lines=161..172]
 
 === Loop over an array
 
-[source,asm]
+[source,x86asm]
 ----
 include::examples/4_subroutine.asm[lines=174..189]
 ----
 
 === Array indexing
 
-[source,asm]
+[source,x86asm]
 ----
 include::examples/4_subroutine.asm[lines=214..224]
 ----
 
 === Stack deallocation
 
-[source,asm]
+[source,x86asm]
 ----
 include::examples/4_subroutine.asm[lines=191..192]
 ----

@@ -19,7 +19,7 @@ sqrt((2 + 17 xx 30) / (10 - 2))
 
 === asciimath:[17 xx 30]
 
-[source,asm]
+[source,x86asm]
 ----
 include::examples/3_numeric.asm[lines=19..21]
 ----
@@ -27,7 +27,7 @@ include::examples/3_numeric.asm[lines=19..21]
 
 === asciimath:[2 +]
 
-[source,asm]
+[source,x86asm]
 ----
 include::examples/3_numeric.asm[lines=22]
 ----
@@ -35,7 +35,7 @@ include::examples/3_numeric.asm[lines=22]
 
 === asciimath:[10 - 2]
 
-[source,asm]
+[source,x86asm]
 ----
 include::examples/3_numeric.asm[lines=24..25]
 ----
@@ -48,7 +48,7 @@ include::examples/3_numeric.asm[lines=24..25]
 | asciimath:[10 - 2]
 |===
 
-[source,asm]
+[source,x86asm]
 ----
 include::examples/3_numeric.asm[lines=27..28]
 ----
@@ -57,13 +57,13 @@ include::examples/3_numeric.asm[lines=27..28]
 
 === asciimath:[sqrt((2 + 17 xx 30) \/ (10 - 2))]
 
-[source,asm]
+[source,x86asm]
 ----
 include::examples/3_numeric.asm[lines=10..11]
 ----
 <1> Reserve space for a quad-word (64 bits)
 
-[source,asm]
+[source,x86asm]
 ----
 include::examples/3_numeric.asm[lines=30..33]
 ----
@@ -72,7 +72,7 @@ include::examples/3_numeric.asm[lines=30..33]
 
 === Whole computation
 
-[source,asm]
+[source,x86asm]
 ----
     mov rax, 17
     mov rcx, 30

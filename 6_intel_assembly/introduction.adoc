@@ -42,7 +42,7 @@ int main(void) {
 114f:  c3
 ----
 |
-[source,asm]
+[source,x86asm]
 ----
                       <1>
 push   rbp
@@ -58,7 +58,7 @@ ret
 
 === First assembly program
 
-[source,asm]
+[source,x86asm]
 ----
 include::examples/1_hello_world.asm[lines=1..9]
 ----
@@ -70,7 +70,7 @@ include::examples/1_hello_world.asm[lines=1..9]
 
 === First program (continued)
 
-[source,asm]
+[source,x86asm]
 ----
 include::examples/1_hello_world.asm[lines=10..]
 ----
@@ -89,14 +89,14 @@ gcc -no-pie 1_hello_world.o -o 1_hello_world
 
 === Assembly program without libc
 
-[source,asm]
+[source,x86asm]
 ----
 include::examples/2_syscalls.asm[lines=1..6]
 ----
 
 === Assembly program without libc (continued)
 
-[source,asm]
+[source,x86asm]
 ----
 include::examples/2_syscalls.asm[lines=8..]
 ----

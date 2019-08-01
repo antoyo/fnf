@@ -14,7 +14,7 @@ image::images/memory_hierarchy.png[Memory Hierarchy]
 
 === Usage of registers
 
-[source,asm]
+[source,x86asm]
 ----
 mov    eax,0x0       <1>
 ----

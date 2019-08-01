@@ -1,7 +1,9 @@
 = Introduction to x86-64 (Intel) Assembly
-:source-highlighter: pygments
 :pygments-style: monokai
 :stem:
+:revealjs_plugins: js/revealjs-plugins.js
+:revealjs_plugins_configuration: js/revealjs-plugins-configuration.js
+:customcss: css/style.css
 
 include::introduction.adoc[]
 

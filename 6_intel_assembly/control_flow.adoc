@@ -2,25 +2,87 @@
 
 === Conditions
 
-[source,asm]
+[source,x86asm]
 ----
 include::examples/5_control_flow.asm[lines=17..29]
 ----
 <1> subtract the two values and set some status flags
 <2> jump if greater than, we want to check if it's lesser than or equal
 
+++++
+<p class="fragment" data-code-focus="1"></p>
+<p class="fragment" data-code-focus="2"></p>
+<p class="fragment" data-code-focus="4"></p>
+<p class="fragment" data-code-focus="5"></p>
+<p class="fragment" data-code-focus="7"></p>
+<p class="fragment" data-code-focus="8"></p>
+<p class="fragment" data-code-focus="13"></p>
+++++
+
 === Example
 
-[source,asm]
+[source,x86asm]
 ----
 include::examples/4_subroutine.asm[lines=28..51]
 ----
 
 === Loops
 
-[source,asm]
+[source,x86asm]
 ----
 include::examples/5_control_flow.asm[lines=31..44]
 ----
 <1> If the counter is greater than 5, exit the loop
 <2> Go back to the beginning of the loop
+
+++++
+<p class="fragment" data-code-focus="1"></p>
+
+<p class="fragment" data-code-focus="4"></p>
+<p class="fragment" data-code-focus="5"></p>
+<p class="fragment" data-code-focus="7"></p>
+<p class="fragment" data-code-focus="8"></p>
+<p class="fragment" data-code-focus="9"></p>
+<p class="fragment" data-code-focus="11"></p>
+<p class="fragment" data-code-focus="12"></p>
+
+<p class="fragment" data-code-focus="4"></p>
+<p class="fragment" data-code-focus="5"></p>
+<p class="fragment" data-code-focus="7"></p>
+<p class="fragment" data-code-focus="8"></p>
+<p class="fragment" data-code-focus="9"></p>
+<p class="fragment" data-code-focus="11"></p>
+<p class="fragment" data-code-focus="12"></p>
+
+<p class="fragment" data-code-focus="4"></p>
+<p class="fragment" data-code-focus="5"></p>
+<p class="fragment" data-code-focus="7"></p>
+<p class="fragment" data-code-focus="8"></p>
+<p class="fragment" data-code-focus="9"></p>
+<p class="fragment" data-code-focus="11"></p>
+<p class="fragment" data-code-focus="12"></p>
+
+<p class="fragment" data-code-focus="4"></p>
+<p class="fragment" data-code-focus="5"></p>
+<p class="fragment" data-code-focus="7"></p>
+<p class="fragment" data-code-focus="8"></p>
+<p class="fragment" data-code-focus="9"></p>
+<p class="fragment" data-code-focus="11"></p>
+<p class="fragment" data-code-focus="12"></p>
+
+<p class="fragment" data-code-focus="4"></p>
+<p class="fragment" data-code-focus="5"></p>
+<p class="fragment" data-code-focus="7"></p>
+<p class="fragment" data-code-focus="8"></p>
+<p class="fragment" data-code-focus="9"></p>
+<p class="fragment" data-code-focus="11"></p>
+<p class="fragment" data-code-focus="12"></p>
+
+<p class="fragment" data-code-focus="4"></p>
+<p class="fragment" data-code-focus="5"></p>
+<p class="fragment" data-code-focus="7"></p>
+<p class="fragment" data-code-focus="8"></p>
+<p class="fragment" data-code-focus="9"></p>
+<p class="fragment" data-code-focus="11"></p>
+<p class="fragment" data-code-focus="12"></p>
+++++
