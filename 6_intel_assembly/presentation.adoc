@@ -1,5 +1,4 @@
 = Introduction to x86-64 (Intel) Assembly
-:pygments-style: monokai
 :stem:
 :revealjs_plugins: js/revealjs-plugins.js
 :revealjs_plugins_configuration: js/revealjs-plugins-configuration.js
