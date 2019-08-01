@@ -1,0 +1,112 @@
+== Why learn an assembly language?
+
+== Compilation of a C program
+
+[source,c]
+----
+#include <stdio.h>
+
+int main(void) {
+    printf("Hello world!\n");
+}
+----
+
+[source]
+----
+0000000000001139 <main>:
+    1139:   55
+    113a:   48 89 e5
+    113d:   48 8d 3d c0 0e 00 00
+    1144:   e8 e7 fe ff ff
+    1149:   b8 00 00 00 00
+    114e:   5d
+    114f:   c3
+----
+
+=== First look at instructions
+
+[cols="1a,1a"]
+|===
+| Binary | Assembly
+
+|
+[source]
+----
+0000000000001139 <main>:
+1139:  55
+113a:  48 89 e5
+113d:  48 8d 3d c0 0e 00 00
+1144:  e8 e7 fe ff ff
+1149:  b8 00 00 00 00
+114e:  5d
+114f:  c3
+----
+|
+[source,asm]
+----
+                      <1>
+push   rbp
+mov    rbp,rsp
+lea    rdi,[rip+0xec0]
+call   1030 <puts@plt>
+mov    eax,0x0
+pop    rbp
+ret
+----
+|===
+<1> `objdump -M intel-syntax -d ./main`
+
+=== First assembly program
+
+[source,asm]
+----
+include::examples/1_hello_world.asm[lines=1..9]
+----
+<1> Label `main` will be accessible from other modules
+<2> Declare a label defined in another object file
+<3> The section `.data` contains initialized data
+<4> The following data will be aligned on 2 bytes
+<5> `10` is the ascii code for newline
+
+=== First program (continued)
+
+[source,asm]
+----
+include::examples/1_hello_world.asm[lines=10..]
+----
+<1> declare a label
+<2> `rdi` is the register for the first parameter
+<3> `rax` is the register for the return value
+
+=== Assembling our first assembly program
+
+[source,bash]
+----
+nasm -f elf64 1_hello_world.asm
+gcc -no-pie 1_hello_world.o -o 1_hello_world
+./1_hello_world
+----
+
+=== Assembly program without libc
+
+[source,asm]
+----
+include::examples/2_syscalls.asm[lines=1..6]
+----
+
+=== Assembly program without libc (continued)
+
+[source,asm]
+----
+include::examples/2_syscalls.asm[lines=8..]
+----
+<1> Do a system call
+
+=== Assembling without `gcc`
+
+[source,bash]
+----
+nasm -f elf64 2_syscalls.asm
+ld -e main 2_syscalls.o -o 2_syscalls
+./2_syscalls
+----

@@ -1,0 +1,16 @@
+= Introduction to x86-64 (Intel) Assembly
+:source-highlighter: pygments
+:pygments-style: monokai
+:stem:
+
+include::introduction.adoc[]
+
+include::registers.adoc[]
+
+include::numeric.adoc[]
+
+include::control_flow.adoc[]
+
+include::subroutine.adoc[]
+
+include::conclusion.adoc[]

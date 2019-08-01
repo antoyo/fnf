@@ -1,0 +1,91 @@
+== Numeric computations
+
+Computation of
+
+[asciimath]
+++++
+sqrt((2 + 17 xx 30) / (10 - 2))
+++++
+
+=== Strategy of computation
+
+|===
+| | asciimath:[17 xx 30] | |
+| asciimath:[2 +] | asciimath:[17 xx 30] | |
+| |  | | asciimath:[10 - 2]
+| asciimath:[2 +] | asciimath:[17 xx 30] | asciimath:[/] | asciimath:[10 - 2]
+4+| asciimath:[sqrt((2 + 17 xx 30) \/ (10 - 2))]
+|===
+
+=== asciimath:[17 xx 30]
+
+[source,asm]
+----
+include::examples/3_numeric.asm[lines=19..21]
+----
+<1> asciimath:[m\u\l\ ul(rcx) -= rdx:rax larr rax xx ul(rcx)]
+
+=== asciimath:[2 +]
+
+[source,asm]
+----
+include::examples/3_numeric.asm[lines=22]
+----
+<1> asciimath:[rax = rax + 2]
+
+=== asciimath:[10 - 2]
+
+[source,asm]
+----
+include::examples/3_numeric.asm[lines=24..25]
+----
+
+=== asciimath:[(2 + 17 xx 30) \/ (10 - 2)]
+
+|===
+| `rax` | `rbx`
+| asciimath:[2 + 17 xx 30]
+| asciimath:[10 - 2]
+|===
+
+[source,asm]
+----
+include::examples/3_numeric.asm[lines=27..28]
+----
+<1> Forgetting to set `rdx` to `0` might give you an arithmetic exception
+<2> asciimath:[div\ ul(rbx) -= rax larr rdx:rax \/ ul(rbx)]
+
+=== asciimath:[sqrt((2 + 17 xx 30) \/ (10 - 2))]
+
+[source,asm]
+----
+include::examples/3_numeric.asm[lines=10..11]
+----
+<1> Reserve space for a quad-word (64 bits)
+
+[source,asm]
+----
+include::examples/3_numeric.asm[lines=30..33]
+----
+<1> The brackets represent memory indirection
+<2> Pop the value from the FPU stack as an integer
+
+=== Whole computation
+
+[source,asm]
+----
+    mov rax, 17
+    mov rcx, 30
+    mul rcx
+    add rax, 2
+    mov rbx, 10
+    sub rbx, 2
+
+    mov rdx, 0
+    div rbx
+
+    mov [temp], rax
+    fild qword [temp]
+    fsqrt
+    fistp qword [temp]
+----
