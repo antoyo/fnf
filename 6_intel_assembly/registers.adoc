@@ -16,6 +16,22 @@ image::images/memory_hierarchy.png[Memory Hierarchy]
 
 [source,x86asm]
 ----
-mov    eax,0x0       <1>
+mov    eax,0x0       <1> <2>
 ----
 <1> `eax` is the lowest 32-bits of `rax`
+
+The Intel syntax uses the form
+[source,x86asm]
+----
+mov DEST, SOURCE
+----
+while the AT&T syntax uses the opposite
+[source,x86asm]
+----
+mov SOURCE, DEST
+----
+as in
+[source,x86asm]
+----
+mov    $0x0,%eax
+----

@@ -168,6 +168,32 @@ include::examples/4_subroutine.asm[lines=161..172]
 ----
 <1> The stack grows toward low addresses, hence using `add` and not `sub`.
 
+++++
+<p class="fragment" data-code-focus="1"></p>
+<p class="fragment" data-code-focus="2"></p>
+
+<p class="fragment" data-code-focus="5"></p>
+<p class="fragment" data-code-focus="6"></p>
+<p class="fragment" data-code-focus="7"></p>
+<p class="fragment" data-code-focus="8"></p>
+<p class="fragment" data-code-focus="9"></p>
+<p class="fragment" data-code-focus="10"></p>
+
+<p class="fragment" data-code-focus="5"></p>
+<p class="fragment" data-code-focus="6"></p>
+<p class="fragment" data-code-focus="7"></p>
+<p class="fragment" data-code-focus="8"></p>
+<p class="fragment" data-code-focus="9"></p>
+<p class="fragment" data-code-focus="10"></p>
+
+<p class="fragment" data-code-focus="5"></p>
+<p class="fragment" data-code-focus="6"></p>
+<p class="fragment" data-code-focus="7"></p>
+<p class="fragment" data-code-focus="8"></p>
+<p class="fragment" data-code-focus="9"></p>
+<p class="fragment" data-code-focus="10"></p>
+++++
+
 === Loop over an array
 
 [source,x86asm]
