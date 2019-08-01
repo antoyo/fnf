@@ -52,7 +52,7 @@ include::examples/4_subroutine.asm[lines=97..101]
 
 [source,asm]
 ----
-include::examples/4_subroutine.asm[lines=150..154]
+include::examples/4_subroutine.asm[lines=150..153]
 ----
 
 === Attempt #3: factorial example
