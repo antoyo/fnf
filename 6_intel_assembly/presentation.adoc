@@ -14,4 +14,6 @@ include::control_flow.adoc[]
 
 include::subroutine.adoc[]
 
+include::common_compiler_optimizations.adoc[]
+
 include::conclusion.adoc[]

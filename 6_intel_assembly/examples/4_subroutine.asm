@@ -130,7 +130,7 @@ return_address2:
     mov rdi, message
     mov rsi, rax
     call printf
-
+    call print_array_with_lea
     mov rax, 0
     ret
 
@@ -249,6 +249,48 @@ print_array_without_loop_init_loop_end:
 
     mov rdi, message
     mov qword rsi, [rbx + 72]
+    call printf
+
+    leave
+    ret
+
+print_array_with_lea:
+    push rbp
+    mov rbp, rsp
+    sub rsp, 80
+
+    mov rbx, rsp
+    mov r12, 1
+
+print_array_with_lea_init_loop_start:
+    cmp r12, 10
+    jg print_array_with_lea_init_loop_end
+    mov qword [rbx], r12
+    inc r12
+    add rbx, 8
+    jmp print_array_with_lea_init_loop_start
+
+print_array_with_lea_init_loop_end:
+
+    mov rbx, rsp
+
+    mov rdi, message
+    mov rax, 3
+    mov rcx, 8
+    mul rcx
+    add rax, rcx
+    mov qword rsi, [rbx + rax]
+    call printf
+
+    mov rdi, message
+    mov rax, 3
+    lea rsi, [rbx + rax * 8 + 8]
+    mov qword rsi, [rsi]
+    call printf
+
+    mov rdi, message
+    mov rax, 3
+    mov rsi, [rbx + rax * 8 + 8]
     call printf
 
     leave

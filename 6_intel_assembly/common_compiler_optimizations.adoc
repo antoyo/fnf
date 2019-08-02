@@ -1,0 +1,105 @@
+== Common compiler optimizations
+
+// Xor to set to 0
+// Shift to multiply by 2
+// lea for arithmetic
+
+=== Clearing a register
+
+[source,x86asm]
+----
+xor rax, rax
+----
+
+instead of
+
+[source,x86asm]
+----
+mov rax, 0
+----
+
+=== Clearing a register
+
+[source,x86asm]
+----
+  1d:   b8 00 00 00 00          mov    eax,0x0
+  22:   48 31 c0                xor    rax,rax
+----
+
+ * Having smaller code means using less memory, thus better utilizing the
+instruction cache.
+ * It might even mean less page fault.
+
+=== Constant zero register
+
+ * If the value zero is used many times, it can be useful to store it
+   in a register.
+
+[source,x86asm]
+----
+  25:   50                      push   rax
+  26:   6a 00                   push   0x0
+  28:   48 39 c4                cmp    rsp,rax
+  2b:   48 83 fc 00             cmp    rsp,0x0
+----
+
+=== Shift for multiplication
+
+[source,x86asm]
+----
+    shl rax, 3
+----
+
+instead of:
+
+[source,x86asm]
+----
+    mov rcx, 8
+    mul rcx
+
+----
+
+=== Shift for division
+
+[source,x86asm]
+----
+    sar rax, 3
+----
+
+instead of:
+
+[source,x86asm]
+----
+    mov rcx, 8
+    div rcx
+
+----
+
+=== `lea` for address computation
+
+[source,x86asm]
+----
+    mov rsi, [rbx + rax * 8 + 8]
+----
+
+[source,x86asm]
+----
+    lea rsi, [rbx + rax * 8 + 8]
+----
+
+=== `lea` for arithmetic
+
+[source,x86asm]
+----
+2f: 67 8d 84 cb 18 fc ff    lea    eax,[ebx + ecx * 8 - 1000]
+----
+
+instead of:
+
+[source,x86asm]
+----
+37: 89 c8                   mov    eax,ecx
+39: c1 e0 03                shl    eax,3
+3c: 01 d8                   add    eax,ebx
+3e: 2d e8 03 00 00          sub    eax,1000
+----

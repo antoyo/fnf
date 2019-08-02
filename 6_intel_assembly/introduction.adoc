@@ -1,5 +1,12 @@
 == Why learn an assembly language?
 
+ * Debugging
+ * Compilers
+ * Embedded
+ * Drivers and kernel
+ * Using instructions not available in higher level languages
+ * Optimizing for speed and size
+
 == Compilation of a C program
 
 [source,c]
